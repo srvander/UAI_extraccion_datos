@@ -1,151 +1,479 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071f2d"><title>Sesión 01 · Técnicas de extracción de datos</title><link rel="stylesheet" href="../css/estilos.css"></head><body><header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html"><span class="brand-mark">E</span><span>Extracción de datos</span></a><button class="menu-button" aria-label="Menú principal" aria-expanded="false">☰</button></div></header><main><header class="page-hero"><div class="container"><p class="breadcrumb"><a href="../index.html">Programa</a> / Sesión 01</p><p class="eyebrow">Primeros pasos</p><h1 class="display">Preparación, Playwright y trabajo con IA</h1></div></header><section class="stage-intro"><div class="container"><p class="eyebrow">Ruta de aprendizaje</p><h2 class="display">¿Qué veremos en esta sesión?</h2><p>Selecciona una etapa para desplegar su contenido y acceder a los materiales.</p><div class="stage-list"><button class="stage-button" data-stage="etapa-entorno"><span>Etapa 01</span>Instalación y preparación del entorno</button><button class="stage-button" data-stage="etapa-playwright"><span>Etapa 02</span>Introducción a Playwright con Python</button><button class="stage-button" data-stage="etapa-ia"><span>Etapa 03</span>Trabajar con IA en asistencia de código</button><button class="stage-button" data-stage="etapa-caso"><span>Etapa 04</span>Primera tarea: explorar el laboratorio</button></div></section><section id="etapa-entorno" class="stage-detail soft" hidden><div class="container"><div class="stage-detail-head"><div><p class="eyebrow">Etapa 01</p><h2 class="display">Instalación y preparación del entorno</h2></div><button class="close-stage">Cerrar etapa ×</button></div><p>Vamos a configurar un proyecto Python para automatización web. Usa Copilot para que prepare el entorno, pero revisa cada paso antes de autorizar.</p><div class="step-list"><article class="step"><h3>Paso 1: Pedir a Copilot que configure el proyecto</h3><p>Abre la carpeta del diplomado en VS Code. En el chat de Copilot, pega este prompt:</p><pre class="code">Configura esta carpeta como un proyecto Python para automatización web.
-1. Crea un entorno virtual llamado .venv.
-2. Actualiza pip dentro de .venv.
-3. Instala Playwright para Python dentro de .venv.
-4. Instala solamente el navegador Chromium de Playwright.
-5. Crea hola_mundo.py con una prueba mínima que abra https://www.uai.cl/,
-   imprima el título y cierre el navegador.
-6. Indícame cómo seleccionar .venv como intérprete en VS Code.
-No instales paquetes globalmente. Pide mi autorización antes de ejecutar.</pre></article><article class="step"><h3>Paso 2: Revisar y autorizar los comandos</h3><p>Copilot te mostrará una serie de comandos. <strong>Antes de ejecutar nada:</strong></p><ul class="checklist"><li>Lee cada comando línea por línea.</li><li>Verifica que use <code>.venv</code> y no instale globalmente.</li><li>Si algo no está claro, pregunta: "¿Por qué necesitamos este comando?".</li><li>Autoriza solo cuando entiendas qué hace cada línea.</li></ul></article><article class="step"><h3>Paso 3: Ejecutar y verificar</h3><ul class="checklist"><li>Confirma que existe la carpeta <code>.venv</code> en tu proyecto.</li><li>Ejecuta <strong>Python: Select Interpreter</strong> (Ctrl+Shift+P) y selecciona <code>.venv</code>.</li><li>Abre la terminal de VS Code y ejecuta:<pre class="code">python hola_mundo.py</pre></li><li>Deberías ver que Chromium abre www.uai.cl, imprime el título de la página y se cierra automáticamente.</li><li>Si hay error, entrega el mensaje completo a Copilot y pide un diagnóstico antes de reinstalar.</li></ul></article></div><div class="callout"><strong>Idea:</strong> Esta primera tarea <em>es</em> automatización. Vas a autorizar que la IA prepare el entorno mientras tú vigilas cada paso. Así aprendes tanto del proceso técnico como de cómo comunicarte con la IA.</div><div class="stage-bottom"><button class="button close-stage">Volver a las etapas</button><button class="button primary" data-stage="etapa-playwright">Siguiente etapa →</button></div></section><section id="etapa-playwright" class="stage-detail soft" hidden><div class="container"><div class="stage-detail-head"><div><p class="eyebrow">Etapa 02</p><h2 class="display">Automatización, web scraping y Playwright</h2></div><button class="close-stage">Cerrar etapa ×</button></div><h3>Conceptos fundamentales</h3><h4>Automatización web</h4><ul class="checklist"><li><strong>Qué es:</strong> controlar un navegador con código para hacer clic, escribir, enviar formularios y navegar.</li><li><strong>Casos de uso:</strong> descargar reportes, filtrar datos, llenar formularios, tomar capturas de pantalla.</li><li><strong>Ventaja clave:</strong> no depende de APIs oficiales. Si lo ves en pantalla, puedes automatizarlo.</li><li><strong>Diferencia con web scraping:</strong> automatización = interacción + extracción. Scraping = solo leer HTML.</li></ul><h4>Web scraping</h4><ul class="checklist"><li><strong>Qué es:</strong> extraer datos del HTML de una página (texto, atributos, URLs).</li><li><strong>Métodos:</strong> expresiones regulares, selectores CSS, XPath, o parsers como BeautifulSoup.</li><li><strong>Cuándo usarlo solo:</strong> si la página es estática o no necesitas JavaScript.</li><li><strong>Cuándo necesitas automatización:</strong> si los datos aparecen tras hacer clic en un botón o seleccionar filtros.</li></ul><h3>¿Por qué Playwright en lugar de Selenium?</h3><h4>Playwright</h4><ul class="checklist"><li><strong>Instalación:</strong> todo incluido. Descarga navegadores automáticamente.</li><li><strong>Velocidad:</strong> más rápido que Selenium. Maneja mejor el JavaScript moderno.</li><li><strong>Esperas:</strong> automáticas. No necesitas dormir constantemente con <code>time.sleep()</code>.</li><li><strong>Localizadores:</strong> buscas por rol, etiqueta, texto visible. Más legible que selectores CSS complejos.</li><li><strong>Codegen:</strong> herramienta integrada para grabar acciones y generar código.</li><li><strong>Evidencia:</strong> captura pantalla, traza, video, descarga de archivos de forma nativa.</li><li><strong>Navegadores:</strong> Chromium, Firefox, WebKit en el mismo código.</li><li><strong>Contextos aislados:</strong> puedes correr varias sesiones sin conflicto.</li></ul><h4>Selenium</h4><ul class="checklist"><li><strong>Instalación:</strong> necesitas descargar WebDriver aparte (chromedriver, etc.).</li><li><strong>Velocidad:</strong> más lento. Overhead de comunicación entre Python y el driver.</li><li><strong>Esperas:</strong> debes configurarlas manualmente. Fácil caer en <code>time.sleep()</code>.</li><li><strong>Localizadores:</strong> selectores CSS/XPath más complejos. Menos intuitivos.</li><li><strong>Codegen:</strong> no tiene. Debes escribir el código a mano o usar extensiones de terceros.</li><li><strong>Evidencia:</strong> tienes que implementarla tú. Screenshots manuales, logging, etc.</li><li><strong>Navegadores:</strong> cada uno necesita su driver específico.</li><li><strong>Ventaja:</strong> más antiguo, así que hay más Stack Overflow y ejemplos.</li></ul><h4>Resumen: cuándo elegir cada uno</h4><ul class="checklist"><li><strong>Elige Playwright si:</strong> necesitas velocidad, automatización moderna, código limpio y quieres gastar menos tiempo en configuración.</li><li><strong>Elige Selenium si:</strong> tienes un proyecto legacy que ya lo usa, o necesitas máxima compatibilidad con navegadores muy antiguos.</li><li><strong>Para este curso:</strong> usamos Playwright porque es más rápido de aprender y produce código más legible.</li></ul><h3>Flujo típico</h3><p>La mayoría de tareas en este diplomado siguen este patrón:</p><ol><li>Abrir navegador y acceder a URL.</li><li>Esperar a que cargue (sin pausas arbitrarias).</li><li>Localizar y hacer clic en filtros, botones, enlaces.</li><li>Esperar a que la tabla o contenido se actualice.</li><li>Localizar las filas de datos.</li><li>Extraer texto, atributos, URLs de cada fila.</li><li>Guardar en CSV, JSON o base de datos.</li></ol><pre class="code">from playwright.sync_api import sync_playwright
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071f2d" />
+    <title>Sesión 01 · Técnicas de extracción de datos</title>
+    <style>
+      :root {
+        --navy: #071f2d;
+        --navy-2: #123142;
+        --ink: #1a2d39;
+        --teal: #0d6d7a;
+        --teal-2: #0f8994;
+        --mist: #edf7f5;
+        --paper: #fbfaf6;
+        --white: #ffffff;
+        --gold: #d7a85b;
+        --muted: #5d7280;
+        --line: #dfeae7;
+        --shadow: 0 18px 55px rgba(8, 38, 50, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.6;
+      }
+      a { color: inherit; text-decoration: none; }
+      img { max-width: 100%; display: block; }
+      .container {
+        width: min(100% - 32px, 1160px);
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(7, 31, 45, 0.96);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 74px;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--white);
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
+      .brand-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--gold), #b77c2d);
+        color: var(--navy);
+        font-weight: 900;
+      }
+      .main-nav {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: rgba(255,255,255,0.85);
+        font-size: 0.96rem;
+      }
+      .main-nav a {
+        opacity: 0.86;
+      }
+      .main-nav a:hover { opacity: 1; }
+
+      .page-hero {
+        background: var(--mist);
+        border-bottom: 1px solid var(--line);
+        padding: 48px 0 36px;
+      }
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+      .breadcrumb a { color: var(--teal); font-weight: 700; }
+      .eyebrow {
+        margin: 18px 0 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .display {
+        margin: 0;
+        font-size: clamp(2.1rem, 4vw, 3.8rem);
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+      }
+
+      .stage-intro {
+        padding: 52px 0 24px;
+      }
+      .stage-intro p {
+        max-width: 760px;
+        margin: 0;
+        font-size: 1.08rem;
+        color: var(--muted);
+      }
+
+      .stage-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+      .stage-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 72px;
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--white);
+        color: var(--navy-2);
+        font-weight: 700;
+        box-shadow: 0 8px 22px rgba(17, 34, 48, 0.03);
+      }
+      .stage-card strong {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(13, 109, 122, 0.08);
+        color: var(--teal);
+        margin-right: 10px;
+      }
+
+      .stage-details {
+        padding: 26px 0 70px;
+      }
+      .step-box {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .step-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 28px 30px 18px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(13,109,122,0.03), rgba(13,109,122,0));
+      }
+      .step-header h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2vw, 2.5rem);
+      }
+      .step-header button {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--navy-2);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .step-content {
+        padding: 30px;
+      }
+      .step-content p {
+        margin: 0 0 18px;
+        color: var(--ink);
+      }
+      .step-content h3 {
+        margin: 26px 0 12px;
+        font-size: 1.3rem;
+      }
+      .code {
+        margin: 12px 0 18px;
+        padding: 16px 18px;
+        border-radius: 12px;
+        background: #0b1721;
+        color: #d9f5f5;
+        border: 1px solid rgba(255,255,255,0.05);
+        overflow-x: auto;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+      pre.code {
+        white-space: pre-wrap;
+      }
+      .checklist {
+        margin: 0;
+        padding-left: 20px;
+        display: grid;
+        gap: 10px;
+      }
+      .checklist li {
+        color: var(--ink);
+      }
+      .checklist strong { color: var(--navy); }
+      .section-note {
+        padding: 16px 18px;
+        border-left: 4px solid var(--gold);
+        background: rgba(215,168,91,0.08);
+        border-radius: 12px;
+        margin-top: 18px;
+      }
+      .section-note strong { color: var(--navy); }
+
+      .footer {
+        background: var(--navy);
+        color: rgba(255,255,255,0.8);
+        padding: 28px 0;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 900px) {
+        .stage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 640px) {
+        .main-nav { display: none; }
+        .step-header { flex-direction: column; align-items: flex-start; }
+        .stage-grid { grid-template-columns: 1fr; }
+        .step-content { padding: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark">E</span>
+          <span>Extracción de datos</span>
+        </a>
+        <nav class="main-nav" aria-label="Navegación principal">
+          <a href="../index.html">Programa</a>
+          <a href="#etapa-entorno">Etapa 01</a>
+          <a href="#etapa-playwright">Etapa 02</a>
+          <a href="#etapa-ia">Etapa 03</a>
+          <a href="#etapa-caso">Etapa 04</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="../index.html">Programa</a>
+            <span>/</span>
+            <span>Sesión 01</span>
+          </div>
+          <p class="eyebrow">Primero pasos</p>
+          <h1 class="display">Preparación, Playwright y trabajo con IA</h1>
+        </div>
+      </section>
+
+      <section class="stage-intro">
+        <div class="container">
+          <p>Rota de aprendizaje para desplegar un entorno de automatización reproducible, entender los fundamentos de web scraping con Playwright y usar IA como asistente técnico en un flujo seguro y documentado.</p>
+          <div class="stage-grid">
+            <div class="stage-card"><strong>01</strong>Entorno</div>
+            <div class="stage-card"><strong>02</strong>Playwright</div>
+            <div class="stage-card"><strong>03</strong>IA</div>
+            <div class="stage-card"><strong>04</strong>Caso</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-entorno" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 01 · Instalar y preparar el entorno</h2>
+              <button type="button">Cerrar etapa</button>
+            </div>
+            <div class="step-content">
+              <p>Antes de escribir código, configuramos Python, creamos un entorno virtual y aseguramos que el flujo sea limpio y reproducible.</p>
+
+              <h3>Paso 1: Verificar Python</h3>
+              <pre class="code">python --version</pre>
+              <pre class="code">python3 --version</pre>
+              <p>Así confirmamos la versión disponible antes de crear el entorno.</p>
+
+              <h3>Paso 2: Crear un entorno virtual</h3>
+              <pre class="code">python -m venv .venv</pre>
+
+              <h3>Paso 3: Activar el entorno</h3>
+              <pre class="code"># macOS / Linux
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate</pre>
+
+              <h3>Paso 4: Instalar Playwright</h3>
+              <pre class="code">pip install playwright</pre>
+              <pre class="code">python -m playwright install chromium</pre>
+
+              <h3>Paso 5: Crear script mínimo</h3>
+              <pre class="code">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+    page.goto("https://www.uai.cl/")
+    print(f"Título: {page.title()}")
+    browser.close()</pre>
+
+              <p>Ejecuta:</p>
+              <pre class="code">python hola_mundo.py</pre>
+              <p>Deberías ver que se abre un navegador, carga la página, imprime el título y se cierra.</p>
+
+              <h3>Paso 6: Seleccionar intérprete en VS Code</h3>
+              <p>En VS Code:</p>
+              <ul class="checklist">
+                <li>Abre la paleta con <strong>Ctrl+Shift+P</strong> o <strong>Cmd+Shift+P</strong>.</li>
+                <li>Selecciona <strong>Python: Select Interpreter</strong>.</li>
+                <li>Elige el entorno <strong>.venv</strong> creado en la carpeta del proyecto.</li>
+              </ul>
+              <div class="section-note">
+                <strong>Nota:</strong> No instales paquetes globalmente ni ejecutes nada sin pedir autorización previa.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-playwright" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 02 · Automatización web con Playwright</h2>
+              <button type="button">Cerrar etapa</button>
+            </div>
+            <div class="step-content">
+              <p>Playwright permite controlar un navegador real, navegar, interactuar con controles, esperar estados y extraer datos de páginas web.</p>
+
+              <h3>Conceptos fundamentales</h3>
+              <ul class="checklist">
+                <li><strong>Navegación:</strong> abrir una URL, esperar a que cargue, avanzar por la interfaz.</li>
+                <li><strong>Interacciones:</strong> clicks, selección de opciones, autocompletar campos.</li>
+                <li><strong>Validación:</strong> confirmar que una tabla o botón apareció antes de continuar.</li>
+                <li><strong>Extracción:</strong> leer texto, atributos o filas de una tabla.</li>
+              </ul>
+
+              <h3>Ejemplo de flujo</h3>
+              <pre class="code">from playwright.sync_api import sync_playwright
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
     page = browser.new_page()
     page.goto("https://sitio-publico.example")
-    
-    # Esperar a que cargue
+
     page.wait_for_load_state("networkidle")
-    
-    # Hacer clic en un filtro
     page.get_by_role("button", name="Filtros").click()
-    
-    # Seleccionar una opción
     page.get_by_label("Organismo").select_option("salud")
-    
-    # Aplicar filtros
     page.get_by_role("button", name="Aplicar").click()
-    
-    # Esperar tabla
     page.locator("table tbody").wait_for()
-    
-    # Extraer datos
+
     rows = page.locator("table tbody tr").all()
     for row in rows:
         cells = row.locator("td").all()
         print([cell.text_content() for cell in cells])
-    
-    browser.close()</pre><h3>Herramientas integradas</h3><ul class="checklist"><li><strong>Codegen:</strong> <code>python -m playwright codegen https://tu-sitio</code>. Graba lo que hagas y genera código.</li><li><strong>Inspector:</strong> dentro de Codegen, ves los localizadores sugeridos en tiempo real.</li><li><strong>Trazas:</strong> registra cada acción, evento y cambio en el DOM. Útil para debugging.</li><li><strong>Capturas:</strong> toma screenshots en cualquier momento del flujo.</li></ul><div class="stage-bottom"><button class="button close-stage">Volver a las etapas</button><button class="button primary" data-stage="etapa-ia">Siguiente etapa →</button></div></section><section id="etapa-ia" class="stage-detail soft" hidden><div class="container"><div class="stage-detail-head"><div><p class="eyebrow">Etapa 03</p><h2 class="display">Trabajar con IA en asistencia de código</h2></div><button class="close-stage">Cerrar etapa ×</button></div><h3>1. Recomendaciones generales sobre uso de IA en asistencia de código</h3><p>La inteligencia artificial es una herramienta poderosa, pero requiere disciplina, claridad y responsabilidad. Estas recomendaciones te ayudarán a obtener mejores resultados y a evitar problemas comunes.</p><h4>1.1 Instrucciones claras y específicas</h4><ul class="checklist"><li><strong>Sé específico:</strong> en lugar de "haz un script que descargue datos", di "descarga los datos de la tabla con ID 'reporte-mensual' filtrando por mes y año, y guarda cada fila en un CSV".</li><li><strong>Divide tareas complejas:</strong> si tienes una tarea grande, divídela en pasos lógicos. Pide primero la navegación, luego la extracción, luego la exportación.</li><li><strong>Incluye contexto:</strong> explica qué tecnología usas, qué versiones, qué has intentado y qué errores obtuviste. Más contexto = mejores respuestas.</li><li><strong>Define el resultado esperado:</strong> no solo digas qué quieres, sino cómo se vería el resultado. Por ejemplo: "la salida debe ser un archivo CSV con columnas: Nombre, Fecha, Monto, Estado".</li></ul><h4>1.2 Información sensible: qué NO compartir</h4><ul class="checklist"><li><strong>Nunca compartas credenciales:</strong> usuarios, contraseñas, claves API, tokens de autenticación. Si necesitas acceso, pide a la IA que te ayude a gestionar variables de entorno (.env).</li><li><strong>No incluyas datos personales:</strong> si trabajas con un CSV que contiene nombres, cédulas o emails reales, anonimiza los datos antes de compartir.</li><li><strong>Evita URLs con parámetros sensibles:</strong> si una URL contiene sesión de usuario, ID privado o clave, reemplázala con un placeholder: "https://ejemplo.com/?sesion=[TU_SESION]".</li><li><strong>Cuidado con el código de terceros:</strong> si usas código de un repositorio privado o de clientes, no lo compartas directamente. Describe el problema en términos generales.</li><li><strong>Manejo de logs y errores:</strong> si un error contiene datos sensibles, elimínalos. Por ejemplo: en lugar de "Error: invalid user 'juan.perez@empresa.cl'", escribe "Error: invalid user".</li></ul><h4>1.3 Validación de respuestas de IA</h4><ul class="checklist"><li><strong>No confíes ciegamente:</strong> la IA puede generar código que se ve correcto pero tiene errores lógicos o de seguridad.</li><li><strong>Prueba en un ambiente aislado:</strong> antes de ejecutar código en producción, pruébalo en una rama local o un entorno sandbox.</li><li><strong>Verifica dependencias:</strong> si la IA sugiere un paquete, comprueba que exista en PyPI, que esté mantenido y que sea compatible con tu versión de Python.</li><li><strong>Lee el código completo:</strong> no copies fragmentos aislados. Entiende la lógica general: cómo se abre el navegador, cómo se espera a elementos, cómo se guardan datos.</li><li><strong>Pide explicaciones:</strong> si no entiendes una línea, pregunta "¿qué hace esta línea y por qué es importante?".</li></ul><h4>1.4 Iteración efectiva con IA</h4><ul class="checklist"><li><strong>Feedback específico:</strong> en lugar de "no funciona", di "el script se abre pero no encuentra el botón con texto 'Aplicar filtro'".</li><li><strong>Mantén el contexto:</strong> guarda la conversación. Si necesitas cambios después, puedes referir a partes anteriores sin repetir todo.</li><li><strong>Pregunta alternativas:</strong> si una solución no te convence, pide "¿hay otra forma de hacer esto?" o "¿cuáles son las ventajas y desventajas de esta opción?".</li><li><strong>Solicita mejoras incrementales:</strong> primero un script básico que funcione, luego refactorización, luego optimizaciones.</li></ul><h4>1.5 Responsabilidad legal y ética</h4><ul class="checklist"><li><strong>Respeta términos de servicio:</strong> si una web prohíbe scraping, no lo hagas. Busca una API o solicita acceso oficial.</li><li><strong>No eludas controles de acceso:</strong> no uses IA para bypassear login, 2FA o captchas. Usa siempre credenciales propias o solicitadas.</li><li><strong>Licencias de código:</strong> si copias código de una librería, respeta su licencia (GPL, MIT, Apache, etc.). La IA puede no mencionar esto.</li><li><strong>Documentación y auditoría:</strong> registra qué datos extraes, de dónde, cuándo y por qué. Esto es importante para transparencia y cumplimiento.</li></ul><hr><h3>2. Marco de trabajo con IA: archivo AGENTS.md</h3><p>La IA funciona mejor cuando recibe una especificación estable y evidencia. No empleamos pidiendo "haz un scraper": registramos qué debe ocurrir, qué datos necesitamos y cómo validaremos el resultado.</p><p>Guarda este contenido como <code>AGENTS.md</code> en la raíz del proyecto y entrégaselo a Copilot como contexto. Este archivo sirve como manual de instrucciones reutilizable.</p><figure class="prompt-file"><figcaption>AGENTS.md</figcaption><pre class="code"># Guía de Automatización para Asistentes de IA
 
-## Propósito
-Este documento define el estándar de comunicación entre agentes humanos e IA para construcción y mantenimiento de automatizaciones reproducibles en proyectos de extracción de datos.
+    browser.close()</pre>
 
-## 1. Especificación del Objetivo
+              <h3>Herramientas integradas</h3>
+              <ul class="checklist">
+                <li><strong>Codegen:</strong> <span class="code-inline">python -m playwright codegen https://tu-sitio</span>. Graba lo que hagas y genera código.</li>
+                <li><strong>Inspector:</strong> permite ver localizadores sugeridos en tiempo real.</li>
+                <li><strong>Capturas:</strong> toma screenshots en cada paso útil para auditoría.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-### 1.1 Plantilla de Objetivo
-```
-# Objetivo
-Automatizar [sitio o sistema] para obtener [tipo de datos] del período [período].
+      <section id="etapa-ia" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 03 · Trabajo con IA para automatización</h2>
+              <button type="button">Cerrar etapa</button>
+            </div>
+            <div class="step-content">
+              <h3>1. Recomendaciones generales</h3>
+              <p>La IA es útil para acelerar tareas, pero requiere disciplina, contexto claro y validación humana.</p>
+              <ul class="checklist">
+                <li>Define claramente el objetivo, el sitio web, los datos esperados y el formato final.</li>
+                <li>Indica el alcance y los límites del proyecto: ¿qué se extraerá y qué no?</li>
+                <li>Usa prompts muy específicos. Evita instrucciones ambiguas o demasiado generales.</li>
+                <li>Pide que te muestre el código y explica qué hace cada parte antes de ejecutarlo.</li>
+              </ul>
 
-### Alcance (Límites claros)
+              <h3>2. Plantilla sugerida</h3>
+              <pre class="code"># Objetivo
+Automatizar [sitio o sistema] para obtener [tipo de datos] del período [periodo].
+
+### Alcance
 - Página inicial: [URL]
 - Resultado esperado: [columnas, formato, cantidad de filas]
 - No iniciar sesión ni eludir controles de acceso.
-- No enviar más solicitudes que las necesarias (máximo [N] por ejecución).
-- Datos a excluir: [información sensible, PII, etc.]
+- Datos a excluir: [información sensible, PII, etc.]</pre>
 
-### Contexto
-- Organismo responsable: [nombre]
-- Caso de uso: [descripción breve de por qué se necesita]
-- Stakeholder de validación: [quién aprueba el resultado]
-```
+              <h3>3. Buenas prácticas</h3>
+              <ul class="checklist">
+                <li>Describe primero el flujo manual observado.</li>
+                <li>Comparte URLs, nombres de botones y mensajes de error si falla algo.</li>
+                <li>Haz que la IA documente los pasos y las validaciones.</li>
+                <li>Revisa siempre el código generado antes de ejecutarlo.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-## 2. Flujo Manual Observado
+      <section id="etapa-caso" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 04 · Práctica: explorar un laboratorio</h2>
+              <button type="button">Cerrar etapa</button>
+            </div>
+            <div class="step-content">
+              <p>En esta práctica se observa un sitio de ejemplo con filtros, tabla de resultados y controles de navegación. El objetivo es recorrer el flujo mínimo para extraer datos con autonomía y validación.</p>
 
-### 2.1 Descripción paso a paso
-Registra qué hace un usuario manualmente, sin automatización:
-```
-# Flujo manual observado
-1. Abrir [URL]
-2. [Acción específica y resultado esperado]
-3. [Acción específica y resultado esperado]
-4. [Acción específica y resultado esperado]
-5. Verificar que los datos están completos
-```
+              <h3>Flujo sugerido</h3>
+              <ol class="checklist">
+                <li>Abrir la página principal.</li>
+                <li>Acceder al panel de filtros.</li>
+                <li>Elegir una opción válida.</li>
+                <li>Aplicar filtro y esperar la tabla.</li>
+                <li>Extraer datos relevantes y revisarlos.</li>
+              </ol>
 
-**Ejemplo real:**
-```
-1. Abrir https://portal.ejemplo.cl/reportes
-2. Hacer clic en selector "Organismo" y elegir "Contraloría"
-3. Hacer clic en selector "Mes" y elegir "Septiembre 2024"
-4. Presionar botón "Filtrar" y esperar a que aparezca la tabla
-5. Copiar todas las filas de la tabla
-6. Verificar que hay 45 registros (indicado en pie de tabla)
-```
+              <div class="section-note">
+                <strong>Meta:</strong> crear un script que navegue, aplique un filtro y registre el resultado en consola o en un archivo CSV.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-## 3. Estructura de Carpetas y Evidencia
-
-```
-proyecto/
-├── AGENTS.md (este archivo)
-├── evidencia/
-│   ├── capturas/        # Screenshots de cada paso
-│   ├── html/            # DOM renderizado (útil para inspección)
-│   └── codegen/         # Scripts generados por Playwright Codegen
-├── scripts/
-│   ├── main.py          # Script de automatización final
-│   └── utils.py         # Funciones auxiliares
-├── data/
-│   └── salida.csv       # Resultado de la extracción
-└── .env                 # Variables de entorno (NO compartir)
-```
-
-## 4. Reglas Técnicas para Playwright
-
-- Usar Playwright con Python (`from playwright.sync_api import sync_playwright`).
-- Preferir localizadores por rol (`get_by_role()`), texto (`get_by_text()`), o etiqueta (`get_by_label()`).
-  - Evitar CSS complejos o selectores frágiles que cambien con el diseño.
-- Esperar estados explícitamente (`page.wait_for_load_state()`, `page.locator(...).wait_for(...)`).
-  - No usar `time.sleep()` salvo que sea justificado (ej: animación lenta).
-- Separar responsabilidades:
-  - Función para navegación
-  - Función para extracción de datos
-  - Función para exportación
-- No inventar selectores: si falta información, pedir screenshots o HTML.
-
-## 5. Validación de Resultados
-
-```
-# Checklist de validación
-- [ ] Cantidad de filas coincide con la página
-- [ ] URLs, fechas y filtros aplicados están registrados
-- [ ] No hay duplicados
-- [ ] No hay celdas vacías inesperadas
-- [ ] Cambios de estructura están documentados
-- [ ] Script es reproducible en otro equipo
-```
-
-## 6. Información Sensible: Qué No Compartir
-
-- Credenciales (usuario/contraseña)
-- Tokens API o claves de autenticación
-- Datos personales (nombres, cédulas, emails de verdad)
-- URLs con sesiones incrustadas
-- Rutas de sistemas internos
-
-**Reemplazo seguro:**
-- Contraseña → `[MI_CONTRASEÑA]`
-- Email real → `usuario@ejemplo.com`
-- ID de sesión → `[SESION_ID]`
-
-## 7. Integración Continua y Auditoría
-
-- Cada ejecución debe registrar: fecha, hora, cantidad de registros, cambios detectados.
-- Mantener histórico de cambios en el sitio (si la estructura cambia, la IA necesita saberlo).
-- Documentar excepciones: "El mes de febrero tiene solo 28 registros en lugar de 30 porque...".
-
----
-
-**Versión:** 1.0
-**Última actualización:** 2024
-**Autor:** Equipo de Legal Analytics
-</pre></figure><hr><h3>3. Recomendaciones para trabajar con Playwright e IA</h3><p>Playwright es potente pero requiere práctica. Cuando trabajes con IA, sigue estas recomendaciones para obtener código robusto y mantenible.</p><h4>3.1 Localizadores: el corazón de una automatización</h4><ul class="checklist"><li><strong>Prioridad de selectores (de más a menos robusta):</strong><ul><li>1. Por rol y nombre: <code>page.get_by_role("button", name="Filtrar")</code></li><li>2. Por label: <code>page.get_by_label("Mes")</code></li><li>3. Por texto visible: <code>page.get_by_text("Aplicar")</code></li><li>4. Por atributos estables: <code>page.get_by_test_id("submit-btn")</code></li><li>5. CSS simple (último recurso): <code>page.locator(".action-btn")</code></li></ul></li><li><strong>Pide a la IA que explique cada selector:</strong> "¿por qué elegiste este selector y no otro? ¿Qué pasaría si el HTML cambia?".</li><li><strong>Evita selectores frágiles:</strong> si la IA genera <code>page.locator("div:nth-child(3) > button")</code>, pídele una alternativa más robusta.</li></ul><h4>3.2 Esperas y sincronización</h4><ul class="checklist"><li><strong>Usa esperas explícitas:</strong> <code>page.wait_for_load_state("networkidle")</code> o <code>page.locator("table").wait_for(timeout=10000)</code>.</li><li><strong>Evita sleep:</strong> no uses <code>time.sleep(2)</code> a menos que sea por animaciones muy específicas. Documéntalo.</li><li><strong>Captura tiempos de espera:</strong> si un elemento tarda mucho, es señal de que el selector es frágil o que el sitio cambió.</li></ul><h4>3.3 Manejo de errores</h4><ul class="checklist"><li><strong>Pide try-catch estructurado:</strong> la IA a veces genera código sin manejo de excepciones. Solicita: "Agrégale try-catch con logging de errores".</li><li><strong>Logging detallado:</strong> <code>logging.info("Navegando a página 2...")</code> ayuda a debugging. Pídele a la IA que agregue logs.</li><li><strong>Recuperación elegante:</strong> "Si el elemento no existe, ¿qué debería hacer el script? ¿Reintentar? ¿Registrar y continuar?".</li></ul><h4>3.4 Validación de datos</h4><ul class="checklist"><li><strong>Extrae luego valida:</strong> primero obtén los datos, luego valida que sean correctos (no vacíos, tipos esperados, etc.).</li><li><strong>Pide pruebas de datos:</strong> "¿Qué pasa si la tabla está vacía? ¿Si tiene una fila? ¿Si tiene 1000?".</li><li><strong>Comparación con la página:</strong> el script debe reportar: "Se encontraron 45 registros en la tabla y se extrajeron 45. OK."</li></ul><h4>3.5 Codegen como punto de partida</h4><ul class="checklist"><li><strong>Codegen genera borrador, no código final:</strong> úsalo para grabar acciones, pero siempre refactoriza.</li><li><strong>Limpieza de código:</strong> Codegen puede tener acciones redundantes. Pídele a la IA: "Limpia este código, elimina acciones innecesarias, extrae funciones reutilizables".</li><li><strong>Comentarios y documentación:</strong> pide que agregue comentarios explicando qué hace cada sección.</li></ul><h4>3.6 Testing y reproducibilidad</h4><ul class="checklist"><li><strong>Ejecuta en dos ambientes:</strong> en tu máquina y en otra (o CI/CD) para verificar que funciona siempre.</li><li><strong>Diferentes navegadores:</strong> Playwright soporta Chromium, Firefox, WebKit. Prueba al menos en Chromium.</li><li><strong>Versioning del sitio:</strong> si el sitio cambia, documéntalo: "Versión: 2024-09-01. Cambio: Se agregó filtro de rango de fechas".</li></ul><h4>3.7 Preguntas clave para hacer a la IA</h4><ul class="checklist"><li>"¿Qué pasa si este selector falla?"</li><li>"¿Cómo sabemos que la página cargó completamente?"</li><li>"¿Cuál es el máximo número de reintentos si falla?"</li><li>"¿Cómo diferenciamos entre 'error temporal' y 'error estructural'?"</li><li>"¿Qué datos deberíamos registrar para debugging?"</li><li>"¿Cómo escala esto si hay 10 mil registros en lugar de 45?"</li></ul><div class="callout"><strong>Resumen:</strong> La IA funciona mejor cuando tienes especificaciones claras, evidencia visual, feedback iterativo y preguntas específicas. No es "haz todo automáticamente": es un diálogo constante.</div><div class="stage-bottom"><button class="button close-stage">Volver a las etapas</button><button class="button primary" data-stage="etapa-caso">Siguiente etapa →</button></div></section><section id="etapa-caso" class="stage-detail soft" hidden><div class="container"><div class="stage-detail-head"><div><p class="eyebrow">Etapa 04</p><h2 class="display">Primera tarea: explorar el laboratorio</h2></div><button class="close-stage">Cerrar etapa ×</button></div><p>En esta primera tarea no navegaremos al Portal de Transparencia. Usaremos el <a href="../practica/codegen-lab.html" target="_blank" rel="noopener">Laboratorio de práctica para Codegen</a>, una página ficticia que contiene botones, menús, formularios, tabla y controles de ratón.</p><div class="step-list"><article class="step"><h3>1. Abrir Codegen</h3><p>Desde la terminal, ejecuta:</p><pre class="code">python -m playwright codegen --output flujo_inicial.py https://tu-url-del-laboratorio</pre><p>Si trabajas con la versión local, usa una ruta <code>file://</code>:</p><pre class="code">python -m playwright codegen --output flujo_inicial.py file:///ruta/al/laboratorio.html</pre></article><article class="step"><h3>2. Recorrer la navegación</h3><p>Haz clic en "Filtros", selecciona opciones y aplica filtros. Regresa y explora los botones de menú, la tabla, los botones de fila y la paginación.</p></article><article class="step"><h3>3. Practicar interacciones de ratón</h3><p>Pasa el puntero por la tarjeta de práctica, haz clic, prueba doble clic y clic derecho. Cambia el deslizador y observa los valores y el código que Codegen propone.</p></article><article class="step"><h3>4. Guardar y revisar el código</h3><p>Cierra Codegen. Abre el archivo <code>flujo_inicial.py</code> que se generó. Identifica los localizadores, elimina acciones innecesarias y explica qué fragmentos corresponden a los pasos manuales.</p></article><article class="step"><h3>5. Repetir en modo Inspector</h3><p>Usa Codegen nuevamente en la misma URL. Esta vez, enfócate en un solo flujo limpio: filtrar, aplicar y extraer datos. No hagas acciones aleatorias.</p></article></div><div class="callout"><strong>Meta de la tarea:</strong> producir un script que navegue por al menos dos secciones, aplique un filtro, abra un menú, inspeccione una fila y ejecute una interacción especial (ratón, slider, etc.).</div><div class="stage-bottom"><button class="button close-stage">Volver a las etapas</button><a class="button primary" href="../practica/codegen-lab.html" target="_blank" rel="noopener">Abrir laboratorio →</a></div><div class="stage-bottom"><a class="button" href="sesion-02.html">Continuar a sesión 02 →</a></div></section></main><footer class="site-footer"><div class="container footer-inner"><span>Diplomado Legal Analytics · UAI</span><span>Sesión 01</span></div></footer><script src="../js/site.js"></script></body></html>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>Diplomado Legal Analytics · Universidad Adolfo Ibáñez</span>
+        <span>Sesión 01</span>
+      </div>
+    </footer>
+  </body>
+</html>
