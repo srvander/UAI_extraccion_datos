@@ -1,0 +1,12 @@
+HTML de referencia para automatización asistida por IA
+
+Estos archivos guardan el HTML de estados concretos de páginas que se recorrieron con Playwright Codegen. No son páginas independientes del sitio del curso: pueden depender de recursos y rutas del portal original.
+
+Flujo sugerido:
+1. Graba con Codegen el recorrido manual hasta llegar al listado de documentos.
+2. Guarda el HTML cuando el listado completo esté visible.
+3. Entrega a la IA el script de Codegen, el HTML guardado y el resultado que buscas.
+4. Pide que generalice la navegación para recorrer los documentos y descargarlos.
+5. Revisa selectores, paginación, rutas de descarga y límites del sitio antes de ejecutar el script.
+
+La carpeta codigos contiene scripts de ejemplo relacionados con los ejercicios de clase. Los nombres y controles de los portales pueden cambiar; comprueba el flujo actual antes de usar cada script.

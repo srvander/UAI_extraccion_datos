@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071f2d" />
+    <title>Sesión 01 · Técnicas de extracción de datos</title>
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="../../css/presentation.css">
+    <link rel="stylesheet" href="../../css/session.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header"><div class="container header-inner">
+      <a class="brand" href="../../index.html"><span class="brand-mark">E</span><span>Extracción de datos</span></a>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">Menú</button>
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../../index.html">Inicio</a><a href="sesion-01.html" aria-current="page">Sesión 01</a><a href="../../practica/codegen-lab.html">Laboratorio</a></nav>
+    </div></header>
+
+    <main id="contenido">
+      <section class="page-hero">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="../../index.html">Programa</a>
+            <span>/</span>
+            <span>Sesión 01</span>
+          </div>
+          <p class="eyebrow">Primeros pasos</p>
+          <h1 class="display">Preparación, Playwright y trabajo con IA</h1>
+        </div>
+      </section>
+
+      <section class="learning-path" id="ruta">
+        <div class="container">
+          <p>Ruta de aprendizaje para desplegar un entorno de automatización reproducible, entender los fundamentos de web scraping con Playwright y usar IA como asistente técnico en un flujo seguro y documentado.</p>
+          <div class="path-grid">
+            <a class="path-link" href="#etapa-entorno"><strong>01</strong>Entorno</a>
+            <a class="path-link" href="#etapa-playwright"><strong>02</strong>Playwright</a>
+            <a class="path-link" href="#etapa-ia"><strong>03</strong>IA</a>
+            <a class="path-link" href="#etapa-caso"><strong>04</strong>Caso</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-entorno" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 01 · Instalar y preparar el entorno</h2>
+              <a class="button" href="#ruta">Volver a etapas ↑</a>
+            </div>
+            <div class="step-content">
+              <p>Antes de escribir código, configuramos Python, creamos un entorno virtual y aseguramos que el flujo sea limpio y reproducible.</p>
+
+              <h3>Paso 1: Verificar Python</h3>
+              <pre class="code">python --version</pre>
+              <pre class="code">python3 --version</pre>
+              <p>Así confirmamos la versión disponible antes de crear el entorno.</p>
+
+              <h3>Paso 2: Crear un entorno virtual</h3>
+              <pre class="code">python -m venv .venv</pre>
+
+              <h3>Paso 3: Activar el entorno</h3>
+              <pre class="code"># macOS / Linux
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate</pre>
+
+              <h3>Paso 4: Instalar Playwright</h3>
+              <pre class="code">pip install playwright</pre>
+              <pre class="code">python -m playwright install chromium</pre>
+
+              <h3>Paso 5: Crear script mínimo</h3>
+              <pre class="code">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+    page.goto("https://www.uai.cl/")
+    print(f"Título: {page.title()}")
+    browser.close()</pre>
+
+              <p>Ejecuta:</p>
+              <pre class="code">python hola_mundo.py</pre>
+              <p>Deberías ver que se abre un navegador, carga la página, imprime el título y se cierra.</p>
+
+              <h3>Paso 6: Seleccionar intérprete en VS Code</h3>
+              <p>En VS Code:</p>
+              <ul class="checklist">
+                <li>Abre la paleta con <strong>Ctrl+Shift+P</strong> o <strong>Cmd+Shift+P</strong>.</li>
+                <li>Selecciona <strong>Python: Select Interpreter</strong>.</li>
+                <li>Elige el entorno <strong>.venv</strong> creado en la carpeta del proyecto.</li>
+              </ul>
+              <div class="section-note">
+                <strong>Nota:</strong> Instala las dependencias en el entorno virtual y revisa el código antes de ejecutarlo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-playwright" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 02 · Automatización web con Playwright</h2>
+              <a class="button" href="#ruta">Volver a etapas ↑</a>
+            </div>
+            <div class="step-content">
+              <p>Playwright permite controlar un navegador real, navegar, interactuar con controles, esperar estados y extraer datos de páginas web.</p>
+
+              <h3>Conceptos fundamentales</h3>
+              <ul class="checklist">
+                <li><strong>Navegación:</strong> abrir una URL, esperar a que cargue, avanzar por la interfaz.</li>
+                <li><strong>Interacciones:</strong> clics, selección de opciones, autocompletar campos.</li>
+                <li><strong>Validación:</strong> confirmar que una tabla o botón apareció antes de continuar.</li>
+                <li><strong>Extracción:</strong> leer texto, atributos o filas de una tabla.</li>
+              </ul>
+
+              <h3>Ejemplo de flujo con el laboratorio</h3>
+              <p>Desde la raíz del proyecto, inicia un servidor local con <span class="code-inline">python -m http.server 8000</span> y abre el <a href="../../practica/codegen-lab.html">laboratorio</a>.</p>
+              <pre class="code">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=False)
+    page = browser.new_page()
+    page.goto("http://localhost:8000/practica/codegen-lab.html")
+
+    page.get_by_role("button", name="2. Filtros").click()
+    page.get_by_label("Organismo").select_option("salud")
+    page.get_by_role("button", name="Aplicar filtros").click()
+    page.get_by_role("button", name="4. Datos").click()
+    page.locator("table tbody").wait_for()
+
+    rows = page.locator("table tbody tr").all()
+    for row in rows:
+        cells = row.locator("td").all()
+        print([cell.text_content() for cell in cells])
+
+    browser.close()</pre>
+
+              <h3>Herramientas integradas</h3>
+              <ul class="checklist">
+                <li><strong>Codegen:</strong> <span class="code-inline">python -m playwright codegen http://localhost:8000/practica/codegen-lab.html</span>. Graba lo que hagas y genera código.</li>
+                <li><strong>Inspector:</strong> permite ver localizadores sugeridos en tiempo real.</li>
+                <li><strong>Capturas:</strong> toma capturas de pantalla en los pasos útiles para la revisión.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-ia" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 03 · Trabajo con IA para automatización</h2>
+              <a class="button" href="#ruta">Volver a etapas ↑</a>
+            </div>
+            <div class="step-content">
+              <h3>1. Recomendaciones generales</h3>
+              <p>La IA es útil para acelerar tareas, pero requiere disciplina, contexto claro y validación humana.</p>
+              <ul class="checklist">
+                <li>Define claramente el objetivo, el sitio web, los datos esperados y el formato final.</li>
+                <li>Indica el alcance y los límites del proyecto: ¿qué se extraerá y qué no?</li>
+                <li>Usa prompts muy específicos. Evita instrucciones ambiguas o demasiado generales.</li>
+                <li>Pide que te muestre el código y explica qué hace cada parte antes de ejecutarlo.</li>
+              </ul>
+
+              <h3>2. Plantilla sugerida</h3>
+              <pre class="code"># Objetivo
+Automatizar [sitio o sistema] para obtener [tipo de datos] del período [periodo].
+
+### Alcance
+- Página inicial: [URL]
+- Resultado esperado: [columnas, formato, cantidad de filas]
+- No iniciar sesión ni eludir controles de acceso.
+- Datos a excluir: [información sensible, PII, etc.]</pre>
+
+              <h3>3. Buenas prácticas</h3>
+              <ul class="checklist">
+                <li>Describe primero el flujo manual observado.</li>
+                <li>Comparte URLs, nombres de botones y mensajes de error si falla algo.</li>
+                <li>Haz que la IA documente los pasos y las validaciones.</li>
+                <li>Revisa siempre el código generado antes de ejecutarlo.</li>
+              </ul>
+
+              <h3>4. Generalizar Codegen con estados HTML y contexto para IA</h3>
+              <p>Codegen registra un recorrido concreto. Para automatizar una colección completa, guarda también el HTML de la página cuando la lista de documentos ya está visible. Entrega a la IA ese estado guardado junto con el script de Codegen y describe qué debe recorrer, qué datos identificar y qué archivos descargar.</p>
+              <ol class="checklist">
+                <li>Graba con Codegen el recorrido manual hasta una página con documentos disponibles.</li>
+                <li>Guarda el HTML de ese estado en <span class="code-inline">sesiones/sesion-01/docs</span>.</li>
+                <li>Comparte con la IA el script original y el HTML guardado; pide que generalice la navegación para todos los documentos que cumplan el criterio.</li>
+                <li>Revisa los selectores, la paginación y las condiciones de descarga antes de ejecutar el resultado.</li>
+              </ol>
+              <p>Los siguientes archivos sirven como contexto y ejemplos de clase. Los HTML se descargan para adjuntarlos a la IA; son capturas de estados del portal, no páginas del sitio del curso.</p>
+              <div class="resource-grid">
+                <article class="resource-card"><strong>Circulares del SII</strong><a href="docs/circulares.html" download>Descargar HTML de referencia</a><a href="codigos/circulares.py" download>Descargar script de ejemplo</a></article>
+                <article class="resource-card"><strong>Transparencia Activa · Salud</strong><a href="docs/transparencia_super_salud.html" download>Descargar HTML de referencia</a><a href="codigos/demo_transparencia_super_salud.py" download>Descargar script de ejemplo</a></article>
+                <article class="resource-card"><strong>Otros scripts generados en clase</strong><a href="codigos/demo_contraloria.py" download>Contraloría</a><a href="codigos/demo_tta.py" download>Tribunal de Transparencia</a></article>
+                <article class="resource-card"><strong>Instrucciones de la carpeta docs</strong><a href="docs/instrucciones.txt" download>Descargar instrucciones</a></article>
+              </div>
+              <div class="section-note"><strong>Prompt sugerido:</strong> “Usa el script de Codegen y el HTML adjunto para identificar cómo llegar a la lista completa. Adapta el flujo para recorrer cada página y descargar todos los documentos que cumplan [criterio]. Explica los cambios y señala qué debo comprobar antes de ejecutarlo.”</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="etapa-caso" class="stage-details">
+        <div class="container">
+          <div class="step-box">
+            <div class="step-header">
+              <h2>Etapa 04 · Práctica: explorar un laboratorio</h2>
+              <a class="button" href="#ruta">Volver a etapas ↑</a>
+            </div>
+            <div class="step-content">
+              <p>En esta práctica se observa un sitio de ejemplo con filtros, tabla de resultados y controles de navegación. El objetivo es recorrer el flujo mínimo para extraer datos con autonomía y validación.</p>
+
+              <h3>Flujo sugerido</h3>
+              <ol class="checklist">
+                <li>Abrir el laboratorio de práctica.</li>
+                <li>Acceder al panel de filtros.</li>
+                <li>Elegir una opción válida.</li>
+                <li>Aplicar filtro y esperar la tabla.</li>
+                <li>Extraer datos relevantes y revisarlos.</li>
+              </ol>
+
+              <div class="section-note">
+                <strong>Meta:</strong> crear un script que navegue, aplique un filtro y registre el resultado en consola o en un archivo CSV.
+              </div>
+              <div class="stage-actions"><a class="button primary" href="../../practica/codegen-lab.html">Abrir laboratorio de práctica →</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div class="container footer-inner"><span>Diplomado Legal Analytics · Universidad Adolfo Ibáñez</span><span>Sesión 01</span></div></footer>
+    <script src="../../js/site.js"></script>
+  </body>
+</html>
