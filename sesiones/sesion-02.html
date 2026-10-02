@@ -4,29 +4,147 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#071f2d">
-  <title>Sesión 02 · Automatización web avanzada</title>
+  <meta name="description" content="Sesión 02: web scraping, riesgos jurídicos, HTTPX, APIs y un caso práctico con la Revista Chilena de Derecho y Tecnología.">
+  <title>Sesión 02 · Web scraping y APIs</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/presentation.css">
+  <link rel="stylesheet" href="../css/session.css">
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="../index.html"><span class="brand-mark">E</span><span>Extracción de datos</span></a>
   <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">Menú</button>
-  <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="sesion-01/sesion-01.html">Sesión 01</a><a href="../practica/codegen-lab.html">Laboratorio</a></nav>
+  <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="sesion-01/sesion-01.html">Sesión 01</a><a href="sesion-02.html" aria-current="page">Sesión 02</a><a href="../practica/codegen-lab.html">Laboratorio</a></nav>
 </div></header>
 <main id="contenido">
-  <header class="page-hero"><div class="container">
-    <p class="breadcrumb"><a href="../index.html">Programa</a> / Sesión 02</p>
-    <p class="eyebrow">Sesión 02 · En preparación</p>
-    <h1 class="display">Detección y consumo de APIs internas</h1>
-    <p class="subtitle">Limitaciones técnicas y éticas de la extracción desde servicios utilizados por una interfaz web.</p>
-  </div></header>
-  <section class="coming-soon section"><div class="container"><div>
-    <p class="eyebrow">Contenido en preparación</p>
-    <h2 class="display">Automatización web avanzada</h2>
-    <p>El material de esta sesión todavía no está disponible.</p>
-    <a class="button primary" href="../index.html">Volver al programa</a>
+  <section class="page-hero"><div class="container">
+    <div class="breadcrumb"><a href="../index.html">Programa</a><span>/</span><span>Sesión 02</span></div>
+    <p class="eyebrow">De la interfaz a los datos</p>
+    <h1 class="display">Web scraping y uso de APIs</h1>
+    <p class="subtitle">Extraer información pública con HTTPX, reconocer servicios que alimentan páginas dinámicas y evaluar los límites jurídicos y técnicos de cada extracción.</p>
+  </div></section>
+
+  <section class="learning-path" id="ruta"><div class="container">
+    <p>Al terminar, podrás distinguir automatización de extracción, leer respuestas HTML o JSON, localizar solicitudes en la pestaña Red y diseñar un scraper pequeño con límites explícitos.</p>
+    <div class="path-grid path-grid-six">
+      <a class="path-link" href="#conceptos"><strong>01</strong>Conceptos</a>
+      <a class="path-link" href="#riesgos"><strong>02</strong>Riesgos</a>
+      <a class="path-link" href="#jurisprudencia"><strong>03</strong>Jurisprudencia</a>
+      <a class="path-link" href="#httpx"><strong>04</strong>HTTPX</a>
+      <a class="path-link" href="#apis"><strong>05</strong>APIs</a>
+      <a class="path-link" href="#revista"><strong>06</strong>Casos de Uso</a>
+    </div>
+  </div></section>
+
+  <section id="conceptos" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>01 · ¿Qué es web scraping?</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <p>Es la obtención automatizada de información publicada en una web para convertirla en datos reutilizables: filas, campos, archivos o enlaces. Un scraper realiza solicitudes, interpreta respuestas y guarda resultados.</p>
+      <div class="comparison-grid">
+        <article><h3>Automatización web</h3><p>Reproduce acciones de una persona en una interfaz: abrir, hacer clic, completar y descargar. Playwright, visto en la sesión 01, sirve cuando la interacción del navegador importa.</p></article>
+        <article><h3>Web scraping</h3><p>Se centra en extraer y estructurar información. Puede usar un navegador, pero si el servidor entrega HTML o JSON directamente, una solicitud HTTP suele bastar.</p></article>
+      </div>
+      <p>Ejemplo: pulsar «siguiente» en una revista es automatización; reunir título, autor, DOI y enlace de cada artículo en un CSV es scraping. Un proyecto puede combinar ambas técnicas.</p>
+      <h3>Riesgos de uso</h3>
+      <ul class="checklist">
+        <li><strong>Disponibilidad:</strong> muchas solicitudes simultáneas pueden degradar el servicio.</li>
+        <li><strong>Acceso:</strong> autenticación, barreras técnicas y permisos delimitan qué puede consultarse.</li>
+        <li><strong>Datos personales:</strong> que una página sea visible no autoriza cualquier tratamiento posterior, especialmente el masivo.</li>
+        <li><strong>Reutilización:</strong> revisar licencias, condiciones del sitio y derechos sobre obras y bases de datos.</li>
+        <li><strong>Calidad:</strong> cambios de estructura, paginación y duplicados alteran resultados silenciosamente.</li>
+      </ul>
+    </div>
+  </div></div></section>
+
+  <section id="riesgos" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>02 · Riesgos penales: Ley N° 21.459</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <p>La técnica de extracción, por sí sola, no determina el delito. Hay que comprobar la conducta, el medio exigido por el tipo y los hechos del caso. Leemos los <a href="https://www.bcn.cl/leychile/navegar?idNorma=1177743&idVersion=2025-04-01&idParte=" target="_blank" rel="noopener noreferrer">artículos 1 y 2 en Ley Chile</a>.</p>
+      <div class="table-scroll"><table class="lesson-table"><thead><tr><th>Norma</th><th>Elementos relevantes</th><th>Pregunta para un scraper</th></tr></thead><tbody>
+        <tr><th>Art. 2 · Acceso ilícito</th><td> El que, sin autorización o excediendo la autorización que posea y superando barreras técnicas o medidas tecnológicas de seguridad, acceda a un sistema informático</td><td>¿Hubo una barrera técnica real que el programa superó? Una URL pública y la mera automatización no satisfacen por sí solas ese requisito.</td></tr>
+        <tr><th>Art. 1 · Integridad del sistema</th><td>El que obstaculice o impida el normal funcionamiento, total o parcial, de un sistema informático, a través de la introducción, transmisión, daño, deterioro, alteración o supresión de los datos informáticos</td><td>¿Se probó una afectación del funcionamiento y el mecanismo típico? Una carga excesiva o un DoS puede plantear este análisis, pero el volumen de peticiones no basta por sí solo.</td></tr>
+      </tbody></table></div>
+      <div class="section-note"><strong>Distinción clave:</strong> páginas accesibles al público, condiciones de uso, límites de tasa y barreras técnicas son hechos distintos. El incumplimiento de una condición contractual no equivale automáticamente al artículo 2; tampoco toda ralentización configura el artículo 1.</div>
+      <h3>Decisiones antes de ejecutar</h3>
+      <ol class="checklist">
+        <li>Confirmar que el contenido y la ruta son públicos y que no se eluden controles.</li>
+        <li>Leer condiciones de uso, licencia y <span class="code-inline">robots.txt</span>; evaluar también reglas especiales según la fuente.</li>
+        <li>Limitar páginas, frecuencia y descargas; detenerse ante 403, 429 o fallos repetidos.</li>
+        <li>Minimizar datos personales y documentar propósito, origen y fecha de extracción.</li>
+      </ol>
+      <p>Para datos personales del sistema de tramitación electrónica del Poder Judicial existe además una regla específica: el <a href="https://www.bcn.cl/leychile/Navegar?idNorma=1085545" target="_blank" rel="noopener noreferrer">artículo 2 letra c de la Ley N° 20.886</a> prohíbe su tratamiento masivo sin autorización previa.</p>
+    </div>
+  </div></div></section>
+
+  <section id="jurisprudencia" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>03 · Jurisprudencia para discutir</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <div class="case-grid">
+        <article class="case-card"><p class="eyebrow">Chile · 2026</p><h3>In-House Company SpA / CAPJ</h3><p>La Corte de Apelaciones de Valparaíso rechazó un amparo económico frente a la negativa de autorizar uso masivo automatizado de datos judiciales. Aplicó la regla especial de la Ley N° 20.886 y consideró la protección de datos y el riesgo de colapso del servicio. La Corte Suprema confirmó el 29 de julio de 2026.</p><p><strong>Alcance:</strong> resuelve una acción constitucional sobre autorización de tratamiento masivo; no declara cometido un delito de la Ley N° 21.459 ni prohíbe todo scraping.</p><a href="https://www.prieto.cl/emails/alertas/CA-1494-2026.pdf" target="_blank" rel="noopener noreferrer">C.A. Valparaíso, rol 1494-2026 ↗</a><a href="https://www.prieto.cl/emails/alertas/CS-38680-2026.pdf" target="_blank" rel="noopener noreferrer">Corte Suprema, rol 38.680-2026 ↗</a></article>
+        <article class="case-card"><p class="eyebrow">Estados Unidos · 2022</p><h3>hiQ Labs v. LinkedIn</h3><p>El Noveno Circuito volvió a confirmar una medida cautelar en un litigio por extracción de perfiles públicos. Estimó que había preguntas serias sobre si ese acceso podía ser «sin autorización» bajo la CFAA estadounidense.</p><p><strong>Alcance:</strong> decisión cautelar y derecho extranjero; no interpreta la Ley N° 21.459. Sirve para comparar contenido público y espacios con control de acceso.</p><a href="https://cdn.ca9.uscourts.gov/datastore/opinions/2022/04/18/17-16783.pdf" target="_blank" rel="noopener noreferrer">Noveno Circuito, expediente 17-16783 ↗</a></article>
+      </div>
+      <h3>Preguntas de discusión</h3>
+      <ul class="checklist"><li>¿Qué cambia si la información exige iniciar sesión o sortear un bloqueo técnico?</li><li>¿Por qué el fallo chileno sobre datos judiciales no se traslada automáticamente a una revista académica?</li><li>¿Qué evidencia técnica permitiría analizar una afectación real de disponibilidad?</li></ul>
+    </div>
+  </div></div></section>
+
+  <section id="httpx" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>04 · HTTPX: solicitudes con Python</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <p><a href="https://www.python-httpx.org/" target="_blank" rel="noopener noreferrer">HTTPX</a> ofrece una misma interfaz para HTML, JSON y descargas; clientes síncronos y asíncronos; límites de tiempo; y reutilización de conexiones mediante <span class="code-inline">Client</span>. Eso permite enseñar primero el flujo HTTP sencillo y ampliar después a servicios dinámicos. Para clics, JavaScript o estados complejos, sigue siendo útil Playwright.</p>
+      <pre class="code">python -m pip install httpx</pre>
+      <pre class="code">import httpx
+
+url = "https://rchdt.uchile.cl/index.php/RCHDT/issue/current"
+with httpx.Client(timeout=10, follow_redirects=True) as client:
+    respuesta = client.get(url)
+    respuesta.raise_for_status()
+    print(respuesta.status_code, respuesta.url)
+    print(respuesta.text[:300])</pre>
+      <p><span class="code-inline">raise_for_status()</span> detecta errores HTTP; <span class="code-inline">follow_redirects=True</span> es explícito porque HTTPX no sigue redirecciones por defecto; <span class="code-inline">Client</span> reutiliza conexiones. Consulta la <a href="https://www.python-httpx.org/advanced/clients/" target="_blank" rel="noopener noreferrer">documentación de clientes</a> y la <a href="https://www.python-httpx.org/quickstart/" target="_blank" rel="noopener noreferrer">guía básica</a>.</p>
+    </div>
+  </div></div></section>
+
+  <section id="apis" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>05 · APIs visibles e internas</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <p>Una API es una interfaz para pedir datos u operaciones a un sistema. En la web, la interfaz puede solicitar al servidor un documento HTML, un archivo o una respuesta JSON. «API interna» u «oculta» suele nombrar una ruta que usa la propia página sin documentación pública; <strong>que aparezca en la pestaña Red no implica permiso para usarla libremente</strong>.</p>
+      <div class="flow-strip" aria-label="Flujo de una página dinámica"><span>Navegador</span><span aria-hidden="true">→</span><span>Solicitud HTTP</span><span aria-hidden="true">→</span><span>JSON o archivo</span><span aria-hidden="true">→</span><span>Interfaz</span></div>
+      <h3>Cómo reconocer la fuente de datos</h3>
+      <ol class="checklist">
+        <li>Abre herramientas de desarrollador → <strong>Red / Network</strong>, filtra por <strong>Fetch/XHR</strong> y recarga.</li>
+        <li>Activa un filtro de la página. Observa URL, método, parámetros, encabezados, estado y respuesta.</li>
+        <li>Si la respuesta es JSON, identifica la lista y sus campos. Si es un documento, comprueba tipo MIME, tamaño y URL final.</li>
+        <li>Reproduce solo solicitudes públicas permitidas, con parámetros necesarios y una frecuencia moderada. Evita copiar cookies, tokens o credenciales a scripts compartidos.</li>
+      </ol>
+      <p>En páginas dinámicas el HTML inicial puede contener solo un contenedor vacío; los datos aparecen tras una solicitud posterior. Para un JSON público, el patrón básico es:</p>
+      <pre class="code">import httpx
+
+with httpx.Client(timeout=10) as client:
+    r = client.get("https://sitio.example/api/articulos", params={"pagina": 1})
+    r.raise_for_status()
+    datos = r.json()
+    for articulo in datos["resultados"]:
+        print(articulo["titulo"])</pre>
+      <p>La URL anterior es un esquema didáctico, no un servicio real. Para practicar sin depender de un portal ajeno, abre el <a href="../practica/api-lab.html">laboratorio de API local</a> y observa su solicitud JSON en Red.</p>
+    </div>
+  </div></div></section>
+
+  <section id="revista" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>06 · Caso: Revista Chilena de Derecho y Tecnología</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
+    <div class="step-content">
+      <p>Usamos la <a href="https://rchdt.uchile.cl/index.php/RCHDT/issue/current" target="_blank" rel="noopener noreferrer">revista de la Universidad de Chile</a>. Su número actual muestra enlaces a fichas de artículos; cada ficha entrega metadatos y acceso a PDF. La revista declara <a href="https://rchdt.uchile.cl/index.php/RCHDT/polpub" target="_blank" rel="noopener noreferrer">acceso libre a sus contenidos</a>. Este caso combina scraping HTML y descarga documental sin asumir que exista una API pública estable.</p>
+      <h3>Objetivo del scraper</h3>
+      <p>Crear un CSV con título, autores, DOI, URL del artículo y URL del PDF para un máximo de tres artículos. La descarga de un PDF es opcional. El script consulta secuencialmente, espera entre solicitudes y se detiene ante errores.</p>
+      <div class="resource-grid"><article class="resource-card"><strong>Script de clase</strong><span>Python + HTTPX + analizador HTML de la biblioteca estándar.</span><a href="sesion-02/scraper_revista_derecho.py" download>Descargar scraper</a></article><article class="resource-card"><strong>Fuente y práctica</strong><a href="https://rchdt.uchile.cl/index.php/RCHDT/issue/current" target="_blank" rel="noopener noreferrer">Ver número actual ↗</a><a href="../practica/api-lab.html">Explorar laboratorio JSON →</a></article></div>
+      <pre class="code">python -m pip install httpx
+python sesiones/sesion-02/scraper_revista_derecho.py --limit 3
+# Opcional: descarga un PDF después de revisar las URL
+python sesiones/sesion-02/scraper_revista_derecho.py --limit 1 --download-one</pre>
+      <h3>Comprobación en clase</h3>
+      <ol class="checklist"><li>Abre el CSV y compara dos filas con sus fichas originales.</li><li>Verifica que el DOI y el enlace PDF correspondan al mismo artículo.</li><li>Compara lo que aporta una ficha HTML con lo que aporta una respuesta JSON del laboratorio.</li><li>Explica cuándo usarías HTTPX y cuándo necesitarías Playwright.</li></ol>
+    </div>
   </div></div></section>
 </main>
 <footer class="site-footer"><div class="container footer-inner"><span>Diplomado Legal Analytics · Universidad Adolfo Ibáñez</span><span>Sesión 02</span></div></footer>

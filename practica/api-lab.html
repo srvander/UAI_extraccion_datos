@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071f2d">
+  <title>Laboratorio JSON · Sesión 02</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/presentation.css">
+  <link rel="stylesheet" href="../css/session.css">
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="../index.html"><span class="brand-mark">E</span><span>Extracción de datos</span></a>
+  <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">Menú</button>
+  <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="../sesiones/sesion-02.html">Sesión 02</a><a href="api-lab.html" aria-current="page">Laboratorio JSON</a></nav>
+</div></header>
+<main id="contenido">
+  <section class="page-hero"><div class="container">
+    <div class="breadcrumb"><a href="../sesiones/sesion-02.html">Sesión 02</a><span>/</span><span>Laboratorio JSON</span></div>
+    <p class="eyebrow">Práctica guiada</p>
+    <h1 class="display">Una página que carga datos después</h1>
+    <p class="subtitle">Abre la pestaña Red, selecciona Fetch/XHR y pulsa «Cargar artículos». La solicitud trae JSON y la página construye los resultados.</p>
+  </div></section>
+  <section class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>Explora la solicitud</h2><a class="button" href="../sesiones/sesion-02.html#apis">Volver a la lección ↑</a></div>
+    <div class="step-content">
+      <p>Sirve este proyecto desde su raíz con <span class="code-inline">python -m http.server 8000</span> y abre <span class="code-inline">http://localhost:8000/practica/api-lab.html</span>. Los datos y documentos son ficticios.</p>
+      <form id="busqueda-api" class="api-lab-form">
+        <label for="tema"><strong>Tema</strong></label>
+        <select id="tema" name="tema"><option value="todos">Todos</option><option value="datos">Datos</option><option value="autoria">Autoría</option></select>
+        <button class="button primary" type="submit">Cargar artículos</button>
+      </form>
+      <p id="estado-api" role="status" aria-live="polite">Los datos aún no se han solicitado.</p>
+      <div id="resultados-api" class="resource-grid" aria-live="polite"></div>
+      <div class="section-note"><strong>Observa:</strong> la respuesta de <a href="api/articulos.json">articulos.json</a> contiene una lista de objetos y rutas de documentos. El filtro de este laboratorio se aplica en el navegador después de recibir el JSON; en otros sitios puede aplicarlo el servidor.</div>
+      <h3>Prueba con HTTPX</h3>
+      <pre class="code">from pathlib import Path
+from urllib.parse import urljoin
+import httpx
+
+base = "https://srvander.github.io/UAI_extraccion_datos/practica/api/"
+with httpx.Client(timeout=10) as client:
+    respuesta = client.get(urljoin(base, "articulos.json"))
+    respuesta.raise_for_status()
+    articulos = respuesta.json()["resultados"]
+    for articulo in articulos:
+        print(articulo["titulo"], articulo["documento"])
+
+    url_documento = urljoin(base, articulos[0]["documento"])
+    documento = client.get(url_documento)
+    documento.raise_for_status()
+    Path("lectura-01.txt").write_bytes(documento.content)</pre>
+    </div>
+  </div></div></section>
+</main>
+<footer class="site-footer"><div class="container footer-inner"><span>Diplomado Legal Analytics · Universidad Adolfo Ibáñez</span><span>Laboratorio JSON</span></div></footer>
+<script src="../js/site.js"></script>
+<script>
+  const form = document.querySelector("#busqueda-api");
+  const results = document.querySelector("#resultados-api");
+  const status = document.querySelector("#estado-api");
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    results.replaceChildren();
+    status.textContent = "Solicitando JSON…";
+    try {
+      const response = await fetch("api/articulos.json", {cache: "no-store"});
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const data = await response.json();
+      const topic = form.elements.tema.value;
+      const articles = data.resultados.filter(item => topic === "todos" || item.tema === topic);
+      for (const item of articles) {
+        const card = document.createElement("article");
+        card.className = "resource-card";
+        const title = document.createElement("strong");
+        title.textContent = item.titulo;
+        const detail = document.createElement("span");
+        detail.textContent = item.tema + " · " + item.anio;
+        const link = document.createElement("a");
+        link.href = "api/" + item.documento;
+        link.textContent = "Descargar documento de ejemplo";
+        link.download = "";
+        card.append(title, detail, link);
+        results.append(card);
+      }
+      status.textContent = articles.length + " artículos cargados desde JSON.";
+    } catch (error) {
+      status.textContent = "No se pudo cargar el JSON. Abre el laboratorio desde el servidor local.";
+    }
+  });
+</script>
+</body>
+</html>

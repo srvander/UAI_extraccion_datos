@@ -1,0 +1,8 @@
+{
+  "fuente": "Datos ficticios para el laboratorio de la sesión 02",
+  "resultados": [
+    {"id": 1, "titulo": "Transparencia algorítmica en servicios públicos", "tema": "datos", "anio": 2024, "documento": "documentos/lectura-01.txt"},
+    {"id": 2, "titulo": "Licencias para repositorios académicos", "tema": "autoria", "anio": 2025, "documento": "documentos/lectura-02.txt"},
+    {"id": 3, "titulo": "Acceso a datos y seguridad de plataformas", "tema": "datos", "anio": 2026, "documento": "documentos/lectura-03.txt"}
+  ]
+}
