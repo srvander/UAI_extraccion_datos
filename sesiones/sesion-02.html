@@ -66,6 +66,13 @@
         <tr><th>Art. 1 · Integridad del sistema</th><td>El que obstaculice o impida el normal funcionamiento, total o parcial, de un sistema informático, a través de la introducción, transmisión, daño, deterioro, alteración o supresión de los datos informáticos</td><td>¿Se probó una afectación del funcionamiento y el mecanismo típico? Una carga excesiva o un DoS puede plantear este análisis, pero el volumen de peticiones no basta por sí solo.</td></tr>
       </tbody></table></div>
       <div class="section-note"><strong>Distinción clave:</strong> páginas accesibles al público, condiciones de uso, límites de tasa y barreras técnicas son hechos distintos. El incumplimiento de una condición contractual no equivale automáticamente al artículo 2; tampoco toda ralentización configura el artículo 1.</div>
+      <h3>¿Qué puede ser una barrera técnica?</h3>
+      <div class="table-scroll"><table class="lesson-table"><thead><tr><th>Situación</th><th>Qué indica</th><th>Cómo plantear el análisis</th></tr></thead><tbody>
+        <tr><th>Inicio de sesión y permisos</th><td>La aplicación exige cuenta, sesión válida o un rol específico para entrar a una zona.</td><td>Si el scraper entra sin permiso o supera el control de acceso, podría satisfacerse el elemento de barrera del artículo 2. La autorización y los demás hechos siguen siendo decisivos.</td></tr>
+        <tr><th>CAPTCHA o desafío anti automatización</th><td>El sistema exige una comprobación adicional antes de servir el contenido o continuar.</td><td>Si se elude deliberadamente el control para acceder, puede ser relevante como superación de una medida técnica. Ante el desafío, detenerse y buscar una vía autorizada.</td></tr>
+        <tr><th>Bloqueo del servidor: 403, 429 o bloqueo de IP</th><td>El servidor deniega o limita nuevas solicitudes. Un 429 suele indicar demasiadas peticiones en un período.</td><td>Es una señal para parar y revisar el permiso y el ritmo. Cambiar de IP, cuentas o rutas para continuar pese al bloqueo puede aportar evidencia de que se intentó superar una barrera; el código de estado, aislado, no resuelve el análisis penal.</td></tr>
+        <tr><th><span class="code-inline">robots.txt</span> o condición de uso</th><td>Expresa instrucciones o reglas del sitio, pero no necesariamente impide técnicamente recibir la página.</td><td>Debe revisarse y respetarse como señal relevante para el uso responsable. Su existencia o infracción no demuestra por sí sola que se haya superado una medida tecnológica de seguridad.</td></tr>
+      </tbody></table></div>
       <h3>Decisiones antes de ejecutar</h3>
       <ol class="checklist">
         <li>Confirmar que el contenido y la ruta son públicos y que no se eluden controles.</li>
@@ -82,10 +89,9 @@
     <div class="step-content">
       <div class="case-grid">
         <article class="case-card"><p class="eyebrow">Chile · 2026</p><h3>In-House Company SpA / CAPJ</h3><p>La Corte de Apelaciones de Valparaíso rechazó un amparo económico frente a la negativa de autorizar uso masivo automatizado de datos judiciales. Aplicó la regla especial de la Ley N° 20.886 y consideró la protección de datos y el riesgo de colapso del servicio. La Corte Suprema confirmó el 29 de julio de 2026.</p><p><strong>Alcance:</strong> resuelve una acción constitucional sobre autorización de tratamiento masivo; no declara cometido un delito de la Ley N° 21.459 ni prohíbe todo scraping.</p><a href="https://www.prieto.cl/emails/alertas/CA-1494-2026.pdf" target="_blank" rel="noopener noreferrer">C.A. Valparaíso, rol 1494-2026 ↗</a><a href="https://www.prieto.cl/emails/alertas/CS-38680-2026.pdf" target="_blank" rel="noopener noreferrer">Corte Suprema, rol 38.680-2026 ↗</a></article>
-        <article class="case-card"><p class="eyebrow">Estados Unidos · 2022</p><h3>hiQ Labs v. LinkedIn</h3><p>El Noveno Circuito volvió a confirmar una medida cautelar en un litigio por extracción de perfiles públicos. Estimó que había preguntas serias sobre si ese acceso podía ser «sin autorización» bajo la CFAA estadounidense.</p><p><strong>Alcance:</strong> decisión cautelar y derecho extranjero; no interpreta la Ley N° 21.459. Sirve para comparar contenido público y espacios con control de acceso.</p><a href="https://cdn.ca9.uscourts.gov/datastore/opinions/2022/04/18/17-16783.pdf" target="_blank" rel="noopener noreferrer">Noveno Circuito, expediente 17-16783 ↗</a></article>
       </div>
       <h3>Preguntas de discusión</h3>
-      <ul class="checklist"><li>¿Qué cambia si la información exige iniciar sesión o sortear un bloqueo técnico?</li><li>¿Por qué el fallo chileno sobre datos judiciales no se traslada automáticamente a una revista académica?</li><li>¿Qué evidencia técnica permitiría analizar una afectación real de disponibilidad?</li></ul>
+      <ul class="checklist"><li>¿Qué cambia si la información exige iniciar sesión o sortear un bloqueo técnico?</li><li>¿Qué evidencia técnica permitiría analizar una afectación real de disponibilidad?</li></ul>
     </div>
   </div></div></section>
 
