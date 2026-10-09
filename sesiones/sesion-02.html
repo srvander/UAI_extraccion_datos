@@ -141,15 +141,35 @@ with httpx.Client(timeout=10) as client:
     <div class="step-header"><h2>06 · Caso: Revista Chilena de Derecho y Tecnología</h2><a class="button" href="#ruta">Volver a etapas ↑</a></div>
     <div class="step-content">
       <p>Usamos la <a href="https://rchdt.uchile.cl/index.php/RCHDT/issue/current" target="_blank" rel="noopener noreferrer">revista de la Universidad de Chile</a>. Su número actual muestra enlaces a fichas de artículos; cada ficha entrega metadatos y acceso a PDF. La revista declara <a href="https://rchdt.uchile.cl/index.php/RCHDT/polpub" target="_blank" rel="noopener noreferrer">acceso libre a sus contenidos</a>. Este caso combina scraping HTML y descarga documental sin asumir que exista una API pública estable.</p>
-      <h3>Objetivo del scraper</h3>
-      <p>Crear un CSV con título, autores, DOI, URL del artículo y URL del PDF para un máximo de tres artículos. La descarga de un PDF es opcional. El script consulta secuencialmente, espera entre solicitudes y se detiene ante errores.</p>
-      <div class="resource-grid"><article class="resource-card"><strong>Script de clase</strong><span>Python + HTTPX + analizador HTML de la biblioteca estándar.</span><a href="sesion-02/scraper_revista_derecho.py" download>Descargar scraper</a></article><article class="resource-card"><strong>Fuente y práctica</strong><a href="https://rchdt.uchile.cl/index.php/RCHDT/issue/current" target="_blank" rel="noopener noreferrer">Ver número actual ↗</a><a href="../practica/api-lab.html">Explorar laboratorio JSON →</a></article></div>
+      <h3>Dos ejemplos de scraper</h3>
+      <p>Los scripts de <code>sesiones/sesion-02/</code> muestran dos objetivos complementarios sobre la misma fuente. <code>scraper_revista_derecho.py</code> extrae metadatos de un número de la revista y los guarda en CSV; <code>descargar_articulos.py</code> recorre la portada, encuentra la galera PDF de cada ficha y descarga los documentos. La portada y una ficha guardadas localmente permiten inspeccionar la estructura HTML que usa el segundo script.</p>
+      <div class="resource-grid">
+        <article class="resource-card"><strong>Ejemplo 1: scraper de metadatos</strong><span>Recorre un número, lee título, autores, DOI y enlaces, y genera un CSV. Limita el número de fichas; opcionalmente descarga un PDF.</span><a href="sesion-02/scraper_revista_derecho.py" download>Descargar scraper_revista_derecho.py</a></article>
+        <article class="resource-card"><strong>Ejemplo 2: descarga de PDF</strong><span>Identifica fichas y galeras PDF, comprueba dominio, tipo de contenido y firma del archivo, y guarda los documentos con una pausa entre solicitudes.</span><a href="sesion-02/descargar_articulos.py" download>Descargar descargar_articulos.py</a></article>
+        <article class="resource-card"><strong>HTML de contexto: ficha de artículo</strong><span>Permite inspeccionar el elemento <code>a.obj_galley_link.pdf</code> y la URL asociada a la galera.</span><a href="sesion-02/articulo_derecho.html" target="_blank" rel="noopener noreferrer">Abrir articulo_derecho.html ↗</a></article>
+        <article class="resource-card"><strong>HTML de contexto: portada</strong><span>Muestra cómo localizar cada artículo y sus enlaces PDF disponibles.</span><a href="sesion-02/revista_derecho.html" target="_blank" rel="noopener noreferrer">Abrir revista_derecho.html ↗</a></article>
+        <article class="resource-card"><strong>Fuente y práctica</strong><a href="https://rchdt.uchile.cl/index.php/RCHDT" target="_blank" rel="noopener noreferrer">Ver portada de la revista ↗</a><a href="../practica/api-lab.html">Explorar laboratorio JSON →</a></article>
+      </div>
+      <h3>Instalación y ejecución</h3>
+      <p>Ambos scripts usan HTTPX. El primero produce un CSV con metadatos; el segundo descarga los PDF disponibles en una carpeta.</p>
       <pre class="code">python -m pip install httpx
 python sesiones/sesion-02/scraper_revista_derecho.py --limit 3
-# Opcional: descarga un PDF después de revisar las URL
-python sesiones/sesion-02/scraper_revista_derecho.py --limit 1 --download-one</pre>
+python sesiones/sesion-02/descargar_articulos.py --salida articulos_pdf --pausa 1</pre>
+      <p>En <code>scraper_revista_derecho.py</code>, <code>--limit</code> admite de 1 a 10 artículos; <code>--output</code> cambia la ruta del CSV y <code>--download-one</code> descarga el primer PDF. En <code>descargar_articulos.py</code>, <code>--salida</code> elige la carpeta destino y <code>--pausa</code> configura el intervalo entre solicitudes.</p>
+      <h3>Usar estos ejemplos como contexto para generar código con IA</h3>
+      <p>Adjunta o pega los dos scripts y los HTML <code>articulo_derecho.html</code> y <code>revista_derecho.html</code>. Los PDF descargados por el script no son necesarios como contexto.</p>
+      <pre class="code">Usa los archivos adjuntos como ejemplos de clase:
+  - scraper_revista_derecho.py: extrae metadatos de artículos y genera un CSV.
+  - descargar_articulos.py: recorre la portada y descarga los PDF enlazados.
+- revista_derecho.html: portada con las fichas y sus enlaces.
+- articulo_derecho.html: ficha individual; sigue su estructura para encontrar el enlace PDF.
+
+Genera o adapta un script de descarga para la Revista Chilena de Derecho y Tecnología.
+Usa HTTPX, explica el selector o atributo HTML empleado y valida la respuesta PDF.
+No inventes selectores: basa el código en los HTML proporcionados.
+No necesitas cargar ni adjuntar los PDF descargados.</pre>
       <h3>Comprobación en clase</h3>
-      <ol class="checklist"><li>Abre el CSV y compara dos filas con sus fichas originales.</li><li>Verifica que el DOI y el enlace PDF correspondan al mismo artículo.</li><li>Compara lo que aporta una ficha HTML con lo que aporta una respuesta JSON del laboratorio.</li><li>Explica cuándo usarías HTTPX y cuándo necesitarías Playwright.</li></ol>
+      <ol class="checklist"><li>Abre el CSV y compara dos filas con sus fichas originales.</li><li>Verifica que el DOI y el enlace PDF correspondan al mismo artículo.</li><li>Compara el objetivo y el formato de salida de ambos scrapers: metadatos en CSV frente a archivos PDF.</li><li>Explica qué validaciones aplica cada script y cuándo usarías HTTPX o Playwright.</li></ol>
     </div>
   </div></div></section>
 </main>
