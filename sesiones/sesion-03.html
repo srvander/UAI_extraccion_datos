@@ -160,6 +160,14 @@ tesseract --list-langs</code></pre>
         <article class="resource-card"><strong>PDF escaneado de práctica</strong><span>Documento de ejemplo para comparar la salida de cada motor OCR.</span><a href="sesion-03/RES_PRUEBA.pdf" target="_blank" rel="noopener noreferrer">Abrir RES_PRUEBA.pdf ↗</a></article>
       </div>
       <p>Los resultados locales se guardan en <span class="code-inline">resultados_ocr/RES_PRUEBA</span>: textos individuales por motor, JSON con detalle, CSV de comparación y CSV de tiempos y estados. Para comparar resultados, usa el mismo PDF y ejecuta los motores en condiciones similares.</p>
+      <h3>Ejemplo adicional: enriquecer una tabla con OCR</h3>
+      <p>Este flujo toma los datos de transparencia, descarga algunas resoluciones enlazadas y usa únicamente Tesseract para reconocer el texto. Después propone la conclusión, el resultado y la entidad recurrida, y agrega esos campos a la fila de origen del CSV. Los campos extraídos deben contrastarse con el documento original.</p>
+      <div class="resource-grid">
+        <article class="resource-card"><strong>Cuaderno para Windows</strong><span>Usa las librerías instaladas y encuentra el CSV junto al cuaderno o en la carpeta de la sesión.</span><a href="sesion-03/transparencia_ocr_a_tabla_windows.ipynb" download>Descargar cuaderno Windows</a></article>
+        <article class="resource-card"><strong>Cuaderno para Google Colab</strong><span>Instala Tesseract en español y permite subir el CSV de práctica; ofrece descargar la tabla enriquecida.</span><a href="sesion-03/transparencia_ocr_a_tabla_colab.ipynb" download>Descargar cuaderno Colab</a><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer">Abrir Google Colab ↗</a></article>
+        <article class="resource-card"><strong>Datos de transparencia</strong><span>CSV de resoluciones de telecomunicaciones usado como tabla de partida.</span><a href="sesion-03/transparencia_telecom_dic_2024.csv" download>Descargar CSV de práctica</a></article>
+      </div>
+      <p>El cuaderno conserva las columnas de la fuente y añade conclusión, resultado, entidad recurrida y estado del OCR. Como el reconocimiento y las reglas pueden equivocarse, la salida es una propuesta para revisar, no un dato verificado.</p>
       <h3>Instalar los clientes de los servicios en la nube</h3>
       <p>Para utilizar estos servicios desde Python, instala el cliente correspondiente. Además, necesitas una cuenta y las credenciales del servicio; instalar la librería no configura el acceso.</p>
       <pre class="code"><code># Azure Document Intelligence
