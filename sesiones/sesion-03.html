@@ -4,29 +4,147 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#071f2d">
-  <title>Sesión 03 · Extracción de datos PDF</title>
+  <meta name="description" content="Sesión 03: extracción de texto de PDFs digitales y escaneados, Tesseract, EasyOCR, RapidOCR y servicios de IA en la nube.">
+  <title>Sesión 03 · Extracción de textos desde PDF</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/presentation.css">
+  <link rel="stylesheet" href="../css/session.css">
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="../index.html"><span class="brand-mark">E</span><span>Extracción de datos</span></a>
   <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">Menú</button>
-  <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="sesion-01/sesion-01.html">Sesión 01</a><a href="sesion-02.html">Sesión 02</a><a href="../practica/codegen-lab.html">Laboratorio</a></nav>
+  <nav class="main-nav" id="main-nav" aria-label="Navegación principal"><a href="../index.html">Inicio</a><a href="sesion-01/sesion-01.html">Sesión 01</a><a href="sesion-02.html">Sesión 02</a><a href="sesion-03.html" aria-current="page">Sesión 03</a><a href="../practica/codegen-lab.html">Laboratorio</a></nav>
 </div></header>
 <main id="contenido">
   <header class="page-hero"><div class="container">
     <p class="breadcrumb"><a href="../index.html">Programa</a> / Sesión 03</p>
-    <p class="eyebrow">Sesión 03 · En preparación</p>
-    <h1 class="display">Procesamiento de textos y documentos</h1>
-    <p class="subtitle">Herramientas para extraer texto, estructura y datos desde documentos PDF.</p>
+    <p class="eyebrow">Del documento al texto reutilizable</p>
+    <h1 class="display">Extracción de textos desde PDF</h1>
+    <p class="subtitle">Reconocer el origen del documento y elegir cómo leerlo: extracción directa, OCR local o servicios de IA en la nube.</p>
   </div></header>
-  <section class="coming-soon section"><div class="container"><div>
-    <p class="eyebrow">Contenido en preparación</p>
-    <h2 class="display">Extracción de datos PDF</h2>
-    <p>El material de esta sesión todavía no está disponible.</p>
-    <a class="button primary" href="../index.html">Volver al programa</a>
+  <section class="learning-path" id="ruta"><div class="container">
+    <p>Al terminar, podrás distinguir los tipos de PDF, extraer texto de un documento digital y comparar alternativas para escaneados según dificultad, recursos y resultado esperado.</p>
+    <div class="path-grid">
+      <a class="path-link" href="#importancia"><strong>01</strong>Importancia profesional</a>
+      <a class="path-link" href="#tipos"><strong>02</strong>Origen del PDF</a>
+      <a class="path-link" href="#librerias"><strong>03</strong>Digitales: extracción directa</a>
+      <a class="path-link" href="#ocr"><strong>04</strong>Escaneados: OCR e IA</a>
+    </div>
+  </div></section>
+
+  <section id="importancia" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>01 · Importancia para la profesión jurídica</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
+    <div class="step-content">
+      <p>Sentencias, contratos, dictámenes y expedientes suelen circular en PDF. Para analizarlos en conjunto, primero necesitamos convertir su contenido en texto que un programa pueda buscar, comparar y organizar.</p>
+      <ul class="checklist">
+        <li><strong>Búsqueda documental:</strong> localizar menciones de una norma, persona o institución en muchos archivos.</li>
+        <li><strong>Comparación:</strong> detectar cambios entre versiones de un contrato o identificar cláusulas recurrentes.</li>
+        <li><strong>Bases de datos:</strong> reunir número, fecha, materia y organismo de documentos para su análisis.</li>
+        <li><strong>Análisis posterior:</strong> preparar textos para clasificación, estadísticas o consultas con modelos de IA.</li>
+      </ul>
+      <div class="flow-strip" aria-label="Del documento al análisis"><span>PDF</span><span aria-hidden="true">→</span><span>Texto por página</span><span aria-hidden="true">→</span><span>Campos verificados</span><span aria-hidden="true">→</span><span>Tabla y análisis</span></div>
+      <p><strong>Ejemplo de trabajo:</strong> construir una tabla de dictámenes con número, fecha y materia. Extraer el texto permite empezar; identificar esos campos y verificar su exactitud constituye una tarea adicional.</p>
+      <div class="section-note">Guardar el archivo de origen y la página de cada resultado permite contrastar los datos con el documento original y explicar cómo se obtuvieron.</div>
+    </div>
+  </div></div></section>
+
+  <section id="tipos" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>02 · Distinguir PDFs según su origen</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
+    <div class="step-content">
+      <p>La extensión <span class="code-inline">.pdf</span> describe el formato, pero no garantiza que contenga texto extraíble. Dos páginas visualmente similares pueden necesitar tratamientos distintos.</p>
+      <div class="table-scroll"><table class="lesson-table"><caption>Origen del documento y estrategia de extracción</caption><thead><tr><th scope="col">Tipo</th><th scope="col">Qué contiene</th><th scope="col">Cómo extraerlo</th></tr></thead><tbody>
+        <tr><th scope="row">Digital de origen</th><td>Exportado desde Word u otro programa. Habitualmente almacena caracteres y su posición.</td><td>Leer la capa de texto con una librería de PDF.</td></tr>
+        <tr><th scope="row">Escaneado sin OCR</th><td>Imágenes de páginas en papel; vemos letras, pero el archivo no las almacena como caracteres.</td><td>Reconocer el texto de las imágenes mediante OCR.</td></tr>
+        <tr><th scope="row">Escaneado con OCR</th><td>Imagen del documento más una capa de texto reconocida previamente.</td><td>Extraer esa capa y comprobar su calidad; repetir OCR si resulta inutilizable.</td></tr>
+        <tr><th scope="row">Mixto</th><td>Combina páginas digitales, escaneadas o imágenes con texto dentro de una misma página.</td><td>Elegir el tratamiento por página o región, evitando duplicar texto.</td></tr>
+      </tbody></table></div>
+      <h3>Diagnóstico antes de programar</h3>
+      <ol class="checklist">
+        <li>Intenta seleccionar una frase y copiarla en un editor de texto.</li>
+        <li>Comprueba si conserva caracteres, tildes y orden de lectura.</li>
+        <li>Repite en varias páginas, incluyendo anexos: un PDF puede ser mixto.</li>
+        <li>Si la extracción devuelve texto vacío o ilegible, inspecciona la página y determina si requiere OCR.</li>
+      </ol>
+      <p>Que el texto sea seleccionable no demuestra que el PDF sea digital de origen: también puede tener OCR previo. «Digitalizado» suele referirse a un documento escaneado. Además, un PDF exportado puede contener letras convertidas en dibujos, sin texto utilizable.</p>
+      <p>Referencia: <a href="https://pypdf.readthedocs.io/en/stable/user/extract-text.html" target="_blank" rel="noopener noreferrer">tipos de PDF y límites de la extracción en pypdf</a>.</p>
+    </div>
+  </div></div></section>
+
+  <section id="librerias" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>03 · PDFs digitales: el punto de partida más fácil</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
+    <div class="step-content">
+      <p>Cuando existe texto utilizable, podemos leerlo directamente sin reconocer cada letra desde una imagen. Esto suele requerir menos procesamiento que OCR y permite empezar con pocas líneas de Python.</p>
+      <div class="table-scroll"><table class="lesson-table"><caption>Herramientas de extracción directa</caption><thead><tr><th scope="col">Herramienta</th><th scope="col">Para qué sirve</th><th scope="col">Punto de atención</th></tr></thead><tbody>
+        <tr><th scope="row">pypdf</th><td>Extraer texto por página y manipular archivos PDF. Una entrada sencilla para la clase.</td><td>No reconoce texto de imágenes.</td></tr>
+        <tr><th scope="row">PyMuPDF</th><td>Extraer texto, bloques y coordenadas; convertir páginas en imágenes para un flujo de OCR.</td><td>El orden de los bloques puede requerir ajustes.</td></tr>
+        <tr><th scope="row">pdfplumber</th><td>Inspeccionar posiciones y explorar tablas en documentos con texto.</td><td>Las tablas necesitan ajustes según el diseño; una tabla escaneada requiere reconocimiento previo.</td></tr>
+      </tbody></table></div>
+      <h3>Primer ejemplo: leer un artículo de la sesión 02</h3>
+      <p>Desde la carpeta del proyecto, instala pypdf y guarda el siguiente código como <span class="code-inline">extraer_texto.py</span>. El ejemplo toma el primer PDF de <span class="code-inline">articulos_pdf</span>; puedes sustituir la ruta por otro documento.</p>
+      <pre class="code"><code>python -m pip install pypdf</code></pre>
+      <pre class="code"><code>from pathlib import Path
+from pypdf import PdfReader
+
+archivos = sorted(Path("articulos_pdf").glob("*.pdf"))
+if not archivos:
+    raise SystemExit("Agrega un PDF a la carpeta articulos_pdf.")
+
+archivo = archivos[0]
+lector = PdfReader(archivo)
+for numero, pagina in enumerate(lector.pages, start=1):
+    texto = pagina.extract_text() or ""
+    print(f"\n--- {archivo.name} · Página {numero} ---")
+    print(texto if texto.strip() else "[Sin texto extraíble: revisar la página]")</code></pre>
+      <pre class="code"><code>python extraer_texto.py</code></pre>
+      <p><strong>Comprobación en clase:</strong> compara un párrafo con el PDF abierto. Revisa tildes, encabezados y columnas. Una salida vacía es una señal de diagnóstico, no prueba suficiente de que el documento sea escaneado.</p>
+      <div class="section-note">La extracción directa es sencilla para texto corrido. Recuperar el orden de lectura, notas al pie o tablas puede ser más difícil: un PDF describe cómo presentar contenido en la página, sin garantizar su estructura lógica.</div>
+      <p>Documentación: <a href="https://pypdf.readthedocs.io/en/stable/user/extract-text.html" target="_blank" rel="noopener noreferrer">pypdf</a> · <a href="https://pymupdf.readthedocs.io/en/latest/the-basics.html" target="_blank" rel="noopener noreferrer">PyMuPDF</a> · <a href="https://github.com/jsvine/pdfplumber" target="_blank" rel="noopener noreferrer">pdfplumber</a>.</p>
+    </div>
+  </div></div></section>
+
+  <section id="ocr" class="stage-details"><div class="container"><div class="step-box">
+    <div class="step-header"><h2>04 · PDFs escaneados: OCR y servicios de IA</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
+    <div class="step-content">
+      <p>El reconocimiento óptico de caracteres (OCR) transforma letras visibles en una imagen en texto procesable. En un escaneado sin capa de texto, primero hay que interpretar los píxeles; esto agrega preparación, procesamiento y posibles errores.</p>
+      <div class="flow-strip" aria-label="Proceso de OCR"><span>PDF a imágenes</span><span aria-hidden="true">→</span><span>Preparación</span><span aria-hidden="true">→</span><span>Reconocimiento</span><span aria-hidden="true">→</span><span>Texto y revisión</span></div>
+      <p>Para motores que reciben imágenes, renderizamos las páginas del PDF. Corregir la orientación, probar una resolución suficiente y mejorar el contraste puede ayudar. El desenfoque, las manchas, los sellos y la escritura manuscrita dificultan el reconocimiento.</p>
+      <h3 id="niveles">Tres alternativas según herramientas y recursos</h3>
+      <div class="table-scroll"><table class="lesson-table"><caption>Comparación cualitativa de OCR local y servicios en la nube</caption><thead><tr><th scope="col">Alternativa</th><th scope="col">Herramientas y resultado</th><th scope="col">Recursos y dificultad</th></tr></thead><tbody>
+        <tr><th scope="row">1 · OCR convencional</th><td><strong>Tesseract</strong>, desde Python mediante pytesseract. Punto de partida para transcribir páginas con texto impreso.</td><td>Se ejecuta localmente en CPU. Hay que instalar el motor, el idioma español y preparar las imágenes; instalar pytesseract por sí solo no instala Tesseract. Sin tarifa de API, pero consume tiempo y recursos del equipo.</td></tr>
+        <tr><th scope="row">2 · OCR con modelos de ML</th><td><strong>EasyOCR</strong> y <strong>RapidOCR</strong> detectan regiones de texto y reconocen caracteres con modelos de aprendizaje automático.</td><td>Requieren dependencias y modelos. EasyOCR usa PyTorch y admite CPU o GPU; RapidOCR ofrece motores como ONNX Runtime para ejecución en CPU. El consumo y la velocidad dependen del modelo, resolución y equipo.</td></tr>
+        <tr><th scope="row">3 · IA en la nube</th><td><strong>Azure Document Intelligence</strong> ofrece extracción documental mediante modelos como Read y Layout. <strong>Gemini</strong> interpreta PDFs y puede transcribir o extraer campos mediante instrucciones.</td><td>El proveedor realiza el procesamiento. Requiere conexión, cuenta y configuración de acceso. Hay cuotas, latencia y costos según uso; Azure suele contabilizar páginas y Gemini tokens, según servicio y modelo.</td></tr>
+      </tbody></table></div>
+      <div class="section-note"><strong>Clasificación didáctica:</strong> Tesseract moderno también utiliza redes neuronales. Estos grupos comparan formas de trabajo y despliegue; no son una escala garantizada de precisión. EasyOCR y RapidOCR no reconstruyen por sí solos toda la estructura de una tabla o un documento.</div>
+      <h3>OCR local: elegir y configurar</h3>
+      <ul class="checklist">
+        <li><strong>Tesseract:</strong> comenzar con una página impresa clara y el idioma <span class="code-inline">spa</span>. La calidad de la imagen y la segmentación influyen en el resultado.</li>
+        <li><strong>EasyOCR:</strong> cargar el lector una vez y reutilizarlo. Admite español; usar CPU permite trabajar sin GPU. Los modelos pueden descargarse en la primera ejecución.</li>
+        <li><strong>RapidOCR:</strong> evaluar un motor de inferencia y un modelo adecuados. Comprobar compatibilidad con español y tildes; el modelo predeterminado no debe asumirse suficiente para cualquier idioma.</li>
+      </ul>
+      <p>Los motores locales pueden ejecutarse sin enviar documentos a un proveedor una vez instaladas sus dependencias y modelos. Como orientación, EasyOCR puede requerir más memoria por su entorno PyTorch, mientras RapidOCR busca un despliegue eficiente; hay que medir ambos en el equipo y con documentos reales.</p>
+      <p>Referencias: <a href="https://tesseract-ocr.github.io/tessdoc/" target="_blank" rel="noopener noreferrer">Tesseract</a> · <a href="https://github.com/JaidedAI/EasyOCR" target="_blank" rel="noopener noreferrer">EasyOCR: instalación, modelos y CPU/GPU</a> · <a href="https://github.com/RapidAI/RapidOCR" target="_blank" rel="noopener noreferrer">RapidOCR: modelos y motores de inferencia</a>.</p>
+      <h3>Azure y Gemini: del texto a los campos</h3>
+      <p><strong>Azure Document Intelligence:</strong> usar Read para reconocimiento de texto o Layout para texto y estructura, como tablas. Es útil cuando necesitamos resultados organizados por elementos del documento.</p>
+      <p><strong>Gemini:</strong> enviar un PDF y pedir una transcripción o campos específicos. La interpretación generativa puede omitir, alterar o inventar contenido; cada campo debe contrastarse con el original.</p>
+      <p>Ejemplo de instrucción para extraer campos:</p>
+      <pre class="code"><code>Extrae de este oficio el número, la fecha y el organismo emisor.
+Devuelve JSON con esos campos y la página de origen de cada uno.
+Si un campo no aparece o no es legible, devuelve null.
+Conserva la escritura original y no completes datos por inferencia.</code></pre>
+      <p>Antes de elegir la nube, considera el volumen de páginas, el costo del servicio y si puedes enviar esos documentos al proveedor. Para ejercicios, utiliza archivos públicos o de práctica.</p>
+      <p>Documentación: <a href="https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/overview" target="_blank" rel="noopener noreferrer">Azure Document Intelligence</a> · <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener noreferrer">procesamiento de documentos con Gemini</a>.</p>
+      <h3>Cómo comparar consumo y calidad</h3>
+      <p>Más resolución y más páginas incrementan el trabajo. En local, observa tiempo por página, memoria RAM y uso de CPU/GPU; en la nube, registra páginas o tokens facturados, tiempo de respuesta y reintentos. Estas medidas permiten comparar herramientas sin asumir un consumo fijo.</p>
+      <ol class="checklist">
+        <li>Selecciona una misma página escaneada para todas las herramientas y transcribe manualmente un párrafo de referencia.</li>
+        <li>Compara errores en palabras y en campos críticos: nombres, fechas, montos y números de documento.</li>
+        <li>Registra configuración, resolución, tiempo y consumo. Distingue la descarga y carga inicial de modelos del procesamiento habitual.</li>
+        <li>Elige según calidad suficiente para la tarea, recursos disponibles y volumen; conserva el original para revisar resultados.</li>
+      </ol>
+      <div class="section-note"><strong>Criterio de elección:</strong> extraer primero la capa de texto si es utilizable; probar OCR local para imágenes; evaluar servicios en la nube cuando sus capacidades documentales justifican el costo y el envío de archivos. Verificar siempre los datos críticos.</div>
+    </div>
   </div></div></section>
 </main>
 <footer class="site-footer"><div class="container footer-inner"><span>Diplomado Legal Analytics · Universidad Adolfo Ibáñez</span><span>Sesión 03</span></div></footer>
