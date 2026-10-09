@@ -106,6 +106,14 @@ for numero, pagina in enumerate(lector.pages, start=1):
       <p><strong>Comprobación en clase:</strong> compara un párrafo con el PDF abierto. Revisa tildes, encabezados y columnas. Una salida vacía es una señal de diagnóstico, no prueba suficiente de que el documento sea escaneado.</p>
       <div class="section-note">La extracción directa es sencilla para texto corrido. Recuperar el orden de lectura, notas al pie o tablas puede ser más difícil: un PDF describe cómo presentar contenido en la página, sin garantizar su estructura lógica.</div>
       <p>Documentación: <a href="https://pypdf.readthedocs.io/en/stable/user/extract-text.html" target="_blank" rel="noopener noreferrer">pypdf</a> · <a href="https://pymupdf.readthedocs.io/en/latest/the-basics.html" target="_blank" rel="noopener noreferrer">PyMuPDF</a> · <a href="https://github.com/jsvine/pdfplumber" target="_blank" rel="noopener noreferrer">pdfplumber</a>.</p>
+      <h3>Ejemplo: comparar tres librerías por página</h3>
+      <p>Usa este cuaderno para extraer un mismo PDF digital con PyMuPDF, pypdf y pdfplumber. Despliega el DataFrame en Jupyter para comparar el texto de cada página y genera un Excel con una fila por página y una columna por librería. El PDF de práctica incluido en la carpeta de la sesión se carga por defecto; puedes cambiar la ruta en el cuaderno para probar otro archivo.</p>
+      <div class="resource-grid">
+        <article class="resource-card"><strong>Cuaderno para Jupyter local</strong><span>Incluye extracción, tabla interactiva en Jupyter y exportación con ajuste de texto a Excel.</span><a href="sesion-03/comparacion_extraccion_pdf.ipynb" download>Descargar comparacion_extraccion_pdf.ipynb</a></article>
+        <article class="resource-card"><strong>Cuaderno para Google Colab</strong><span>Lee el PDF desde la raíz de Colab (/content), muestra la comparación en pantalla y ofrece descargar el Excel generado.</span><a href="sesion-03/comparacion_extraccion_pdf_colab.ipynb" download>Descargar cuaderno para Colab</a><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer">Abrir Google Colab ↗</a></article>
+        <article class="resource-card"><strong>PDF digital de práctica</strong><span>Documento de ejemplo con texto seleccionable para ejecutar y comparar los tres métodos.</span><a href="sesion-03/ejemplo_cmf_digital.pdf" target="_blank" rel="noopener noreferrer">Abrir ejemplo_cmf_digital.pdf ↗</a></article>
+      </div>
+      <p>Dependencias: <span class="code-inline">python -m pip install pymupdf pypdf pdfplumber pandas openpyxl</span>. Abre el cuaderno en Jupyter desde la carpeta del proyecto y ejecútalo; el archivo <span class="code-inline">comparacion_extraccion_pdf.xlsx</span> se guardará en la carpeta de trabajo desde la que inicies Jupyter.</p>
     </div>
   </div></div></section>
 
