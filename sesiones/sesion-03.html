@@ -73,7 +73,7 @@
   </div></div></section>
 
   <section id="librerias" class="stage-details"><div class="container"><div class="step-box">
-    <div class="step-header"><h2>03 · PDFs digitales: el punto de partida más fácil</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
+    <div class="step-header"><h2>03 · PDFs digitales:</h2><a class="button" href="#ruta">Volver a temas ↑</a></div>
     <div class="step-content">
       <p>Cuando existe texto utilizable, podemos leerlo directamente sin reconocer cada letra desde una imagen. Esto suele requerir menos procesamiento que OCR y permite empezar con pocas líneas de Python.</p>
       <div class="table-scroll"><table class="lesson-table"><caption>Herramientas de extracción directa</caption><thead><tr><th scope="col">Herramienta</th><th scope="col">Para qué sirve</th><th scope="col">Punto de atención</th></tr></thead><tbody>
@@ -81,6 +81,11 @@
         <tr><th scope="row">PyMuPDF</th><td>Extraer texto, bloques y coordenadas; convertir páginas en imágenes para un flujo de OCR.</td><td>El orden de los bloques puede requerir ajustes.</td></tr>
         <tr><th scope="row">pdfplumber</th><td>Inspeccionar posiciones y explorar tablas en documentos con texto.</td><td>Las tablas necesitan ajustes según el diseño; una tabla escaneada requiere reconocimiento previo.</td></tr>
       </tbody></table></div>
+      <h3>Instalar las librerías de extracción directa</h3>
+      <p>Ejecuta estos comandos en la terminal, con el entorno virtual del proyecto activado. Puedes instalar solo la librería que vayas a utilizar.</p>
+      <pre class="code"><code>python -m pip install pypdf
+python -m pip install pymupdf
+python -m pip install pdfplumber</code></pre>
       <h3>Primer ejemplo: leer un artículo de la sesión 02</h3>
       <p>Desde la carpeta del proyecto, instala pypdf y guarda el siguiente código como <span class="code-inline">extraer_texto.py</span>. El ejemplo toma el primer PDF de <span class="code-inline">articulos_pdf</span>; puedes sustituir la ruta por otro documento.</p>
       <pre class="code"><code>python -m pip install pypdf</code></pre>
@@ -117,6 +122,20 @@ for numero, pagina in enumerate(lector.pages, start=1):
         <tr><th scope="row">3 · IA en la nube</th><td><strong>Azure Document Intelligence</strong> ofrece extracción documental mediante modelos como Read y Layout. <strong>Gemini</strong> interpreta PDFs y puede transcribir o extraer campos mediante instrucciones.</td><td>El proveedor realiza el procesamiento. Requiere conexión, cuenta y configuración de acceso. Hay cuotas, latencia y costos según uso; Azure suele contabilizar páginas y Gemini tokens, según servicio y modelo.</td></tr>
       </tbody></table></div>
       <div class="section-note"><strong>Clasificación didáctica:</strong> Tesseract moderno también utiliza redes neuronales. Estos grupos comparan formas de trabajo y despliegue; no son una escala garantizada de precisión. EasyOCR y RapidOCR no reconstruyen por sí solos toda la estructura de una tabla o un documento.</div>
+      <h3>Instalar las librerías de OCR local</h3>
+      <p>Elige la alternativa que quieras probar y ejecuta su comando en la terminal. Pillow permite abrir y preparar imágenes para pytesseract; PyMuPDF, instalado en la sección anterior, permite convertir las páginas del PDF en imágenes.</p>
+      <pre class="code"><code># Tesseract: interfaz de Python y manejo de imágenes
+python -m pip install pytesseract pillow
+
+# EasyOCR
+python -m pip install easyocr
+
+# RapidOCR con ONNX Runtime para CPU
+python -m pip install rapidocr onnxruntime</code></pre>
+      <p><strong>Requisito adicional de Tesseract:</strong> instala también el motor siguiendo la <a href="https://tesseract-ocr.github.io/tessdoc/Installation.html" target="_blank" rel="noopener noreferrer">guía de instalación para tu sistema operativo</a> y agrega los datos del idioma español (<span class="code-inline">spa.traineddata</span>). El ejecutable debe estar en el PATH o indicarse en la configuración de pytesseract. Comprueba la instalación y que aparezca <span class="code-inline">spa</span> con:</p>
+      <pre class="code"><code>tesseract --version
+tesseract --list-langs</code></pre>
+      <p>En Windows, EasyOCR recomienda instalar primero <a href="https://pytorch.org/get-started/locally/" target="_blank" rel="noopener noreferrer">PyTorch y torchvision</a> con el comando correspondiente a tu equipo (CPU o GPU), y luego instalar EasyOCR.</p>
       <h3>OCR local: elegir y configurar</h3>
       <ul class="checklist">
         <li><strong>Tesseract:</strong> comenzar con una página impresa clara y el idioma <span class="code-inline">spa</span>. La calidad de la imagen y la segmentación influyen en el resultado.</li>
@@ -125,6 +144,14 @@ for numero, pagina in enumerate(lector.pages, start=1):
       </ul>
       <p>Los motores locales pueden ejecutarse sin enviar documentos a un proveedor una vez instaladas sus dependencias y modelos. Como orientación, EasyOCR puede requerir más memoria por su entorno PyTorch, mientras RapidOCR busca un despliegue eficiente; hay que medir ambos en el equipo y con documentos reales.</p>
       <p>Referencias: <a href="https://tesseract-ocr.github.io/tessdoc/" target="_blank" rel="noopener noreferrer">Tesseract</a> · <a href="https://github.com/JaidedAI/EasyOCR" target="_blank" rel="noopener noreferrer">EasyOCR: instalación, modelos y CPU/GPU</a> · <a href="https://github.com/RapidAI/RapidOCR" target="_blank" rel="noopener noreferrer">RapidOCR: modelos y motores de inferencia</a>.</p>
+      <h3>Instalar los clientes de los servicios en la nube</h3>
+      <p>Para utilizar estos servicios desde Python, instala el cliente correspondiente. Además, necesitas una cuenta y las credenciales del servicio; instalar la librería no configura el acceso.</p>
+      <pre class="code"><code># Azure Document Intelligence
+python -m pip install azure-ai-documentintelligence
+
+# Gemini
+python -m pip install google-genai</code></pre>
+      <p>Guías de instalación: <a href="https://learn.microsoft.com/python/api/overview/azure/ai-documentintelligence-readme?view=azure-python" target="_blank" rel="noopener noreferrer">cliente de Azure Document Intelligence</a> · <a href="https://ai.google.dev/gemini-api/docs/libraries" target="_blank" rel="noopener noreferrer">cliente de Gemini</a>.</p>
       <h3>Azure y Gemini: del texto a los campos</h3>
       <p><strong>Azure Document Intelligence:</strong> usar Read para reconocimiento de texto o Layout para texto y estructura, como tablas. Es útil cuando necesitamos resultados organizados por elementos del documento.</p>
       <p><strong>Gemini:</strong> enviar un PDF y pedir una transcripción o campos específicos. La interpretación generativa puede omitir, alterar o inventar contenido; cada campo debe contrastarse con el original.</p>
