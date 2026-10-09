@@ -152,6 +152,14 @@ tesseract --list-langs</code></pre>
       </ul>
       <p>Los motores locales pueden ejecutarse sin enviar documentos a un proveedor una vez instaladas sus dependencias y modelos. Como orientación, EasyOCR puede requerir más memoria por su entorno PyTorch, mientras RapidOCR busca un despliegue eficiente; hay que medir ambos en el equipo y con documentos reales.</p>
       <p>Referencias: <a href="https://tesseract-ocr.github.io/tessdoc/" target="_blank" rel="noopener noreferrer">Tesseract</a> · <a href="https://github.com/JaidedAI/EasyOCR" target="_blank" rel="noopener noreferrer">EasyOCR: instalación, modelos y CPU/GPU</a> · <a href="https://github.com/RapidAI/RapidOCR" target="_blank" rel="noopener noreferrer">RapidOCR: modelos y motores de inferencia</a>.</p>
+      <h3>Ejemplo: comparar motores OCR en el mismo documento</h3>
+      <p>Ejecuta el PDF de práctica con Tesseract, RapidOCR y EasyOCR. Ambos cuadernos usan la misma resolución y configuración de página, muestran el texto reconocido y registran tiempos y estados por motor. Gemini es opcional y está desactivado por defecto.</p>
+      <div class="resource-grid">
+        <article class="resource-card"><strong>Cuaderno para Windows</strong><span>Usa las librerías ya instaladas. Busca el PDF de ejemplo junto al cuaderno; Tesseract y Poppler deben estar instalados.</span><a href="sesion-03/comparacion_ocrs_windows.ipynb" download>Descargar cuaderno Windows</a></article>
+        <article class="resource-card"><strong>Cuaderno para Google Colab</strong><span>Instala las dependencias en Colab y ofrece cargar el PDF de práctica desde el equipo.</span><a href="sesion-03/comparacion_ocrs_colab.ipynb" download>Descargar cuaderno Colab</a><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer">Abrir Google Colab ↗</a></article>
+        <article class="resource-card"><strong>PDF escaneado de práctica</strong><span>Documento de ejemplo para comparar la salida de cada motor OCR.</span><a href="sesion-03/RES_PRUEBA.pdf" target="_blank" rel="noopener noreferrer">Abrir RES_PRUEBA.pdf ↗</a></article>
+      </div>
+      <p>Los resultados locales se guardan en <span class="code-inline">resultados_ocr/RES_PRUEBA</span>: textos individuales por motor, JSON con detalle, CSV de comparación y CSV de tiempos y estados. Para comparar resultados, usa el mismo PDF y ejecuta los motores en condiciones similares.</p>
       <h3>Instalar los clientes de los servicios en la nube</h3>
       <p>Para utilizar estos servicios desde Python, instala el cliente correspondiente. Además, necesitas una cuenta y las credenciales del servicio; instalar la librería no configura el acceso.</p>
       <pre class="code"><code># Azure Document Intelligence
